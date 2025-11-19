@@ -1,9 +1,9 @@
+// src/app/core/services/api.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// Configuração temporária - depois colocamos no environment
-const API_URL = 'https://localhost:7001/api';
+const API_URL = 'http://localhost:5165/api';
 
 @Injectable({
   providedIn: 'root',

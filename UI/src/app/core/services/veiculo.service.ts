@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay, catchError } from 'rxjs/operators';
-import { ApiService } from '../../../core/services/api.service';
+import { ApiService } from './api.service';
 
 export interface Veiculo {
   id: number;
@@ -11,7 +11,7 @@ export interface Veiculo {
   marca: string;
   anoFabricacao: number;
   status: 'Disponivel' | 'Alugado' | 'Manutencao';
-  ultimaManutencao: string; // API geralmente retorna string
+  ultimaManutencao: string;
   proximaManutencao: string;
   quilometragem: number;
   valorDiaria: number;
@@ -28,7 +28,6 @@ export class VeiculoService {
     return this.api.get<Veiculo[]>('veiculos').pipe(
       catchError((error) => {
         console.warn('Erro ao buscar veículos da API, usando mock:', error);
-        // Fallback para dados mock se a API não estiver pronta
         return this.getVeiculosMock();
       })
     );
@@ -50,7 +49,6 @@ export class VeiculoService {
     return this.api.delete(`veiculos/${id}`);
   }
 
-  // Mock temporário enquanto a API não está completamente pronta
   private getVeiculosMock(): Observable<Veiculo[]> {
     const mockVeiculos: Veiculo[] = [
       {
@@ -76,6 +74,18 @@ export class VeiculoService {
         proximaManutencao: '2024-08-20',
         quilometragem: 85000,
         valorDiaria: 520.0,
+      },
+      {
+        id: 3,
+        placa: 'GHI-9012',
+        modelo: 'Scania R 450',
+        marca: 'Scania',
+        anoFabricacao: 2021,
+        status: 'Manutencao',
+        ultimaManutencao: '2024-03-10',
+        proximaManutencao: '2024-09-10',
+        quilometragem: 185000,
+        valorDiaria: 420.0,
       },
     ];
 
