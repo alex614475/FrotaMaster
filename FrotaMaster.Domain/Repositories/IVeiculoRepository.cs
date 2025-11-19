@@ -11,5 +11,6 @@ namespace FrotaMaster.Domain.Repositories
         Task AddAsync(Veiculo veiculo);
         Task UpdateAsync(Veiculo veiculo);
         Task DeleteAsync(int id);
+        Task SaveChangesAsync();
     }
 }

@@ -10,18 +10,29 @@ namespace FrotaMaster.Infrastructure.Persistence
         {
         }
 
-        public DbSet<Veiculo> Veiculos { get; set; } = null!;
+        public DbSet<Veiculo> Veiculos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Veiculo>(b =>
+            modelBuilder.Entity<Veiculo>(entity =>
             {
-                b.HasKey(v => v.Id);
-                b.Property(v => v.Placa).IsRequired();
-                b.Property(v => v.Modelo).IsRequired();
-                b.Property(v => v.Status).HasMaxLength(50);
+                // Especificar o nome exato da tabela no PostgreSQL
+                entity.ToTable("veiculos");
+
+                entity.HasKey(v => v.Id);
+                entity.Property(v => v.Placa)
+                    .IsRequired()
+                    .HasMaxLength(10);
+                entity.Property(v => v.Modelo)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(v => v.Status)
+                    .HasMaxLength(20)
+                    .HasDefaultValue("Disponivel");
+                entity.Property(v => v.Quilometragem)
+                    .HasDefaultValue(0);
             });
         }
     }

@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="FrotaMaster.API/FrotaMaster.API.csproj" />
-  <Project Path="FrotaMaster.Application/FrotaMaster.Application.csproj" />
-  <Project Path="FrotaMaster.Domain/FrotaMaster.Domain.csproj" />
-  <Project Path="FrotaMaster.Infrastructure/FrotaMaster.Infrastructure.csproj" />
-</Solution>

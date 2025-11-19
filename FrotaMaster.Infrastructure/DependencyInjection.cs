@@ -1,5 +1,4 @@
-﻿using Scrutor;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using FrotaMaster.Infrastructure.Persistence;
@@ -14,41 +13,12 @@ namespace FrotaMaster.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDatabase(configuration);
-            services.AddRepositories();
-
-            return services;
-        }
-
-        // -----------------------------
-        // DATABASE
-        // -----------------------------
-        private static IServiceCollection AddDatabase(
-            this IServiceCollection services,
-            IConfiguration configuration)
-        {
+            // PostgreSQL Configuration
             services.AddDbContext<FrotaMasterDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnection")));
 
-            return services;
-        }
-
-        // -----------------------------
-        // REPOSITORIES
-        // -----------------------------
-        private static IServiceCollection AddRepositories(
-            this IServiceCollection services)
-        {
-            // Se quiser adicionar manualmente:
+            // Repositories
             services.AddScoped<IVeiculoRepository, VeiculoRepository>();
-
-            // Registro automático de todos os repositórios na pasta Infrastructure.Repositories
-            services.Scan(scan => scan
-                .FromAssemblyOf<VeiculoRepository>()
-                .AddClasses(classes =>
-                    classes.InNamespaceOf<VeiculoRepository>()) // garante que pega os repositórios da pasta
-                .AsImplementedInterfaces()
-                .WithScopedLifetime());
 
             return services;
         }
