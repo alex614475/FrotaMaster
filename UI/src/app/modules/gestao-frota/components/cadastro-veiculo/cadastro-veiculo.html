@@ -7,7 +7,7 @@
 
   <form [formGroup]="veiculoForm" (ngSubmit)="onSubmit()" class="form">
     <div class="form-section">
-      <h3>Informações Básicas</h3>
+      <h3>Informações do Veículo</h3>
 
       <div class="form-row">
         <div class="form-group">
@@ -58,103 +58,16 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="anoFabricacao">Ano de Fabricação *</label>
+          <label for="ano">Ano *</label>
           <input
-            id="anoFabricacao"
+            id="ano"
             type="number"
-            formControlName="anoFabricacao"
+            formControlName="ano"
             class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('anoFabricacao')?.invalid"
+            [class.is-invalid]="submitted && veiculoForm.get('ano')?.invalid"
           />
-          <div class="error-message" *ngIf="submitted && veiculoForm.get('anoFabricacao')?.invalid">
-            Ano de fabricação é obrigatório
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="cor">Cor *</label>
-          <input
-            id="cor"
-            type="text"
-            formControlName="cor"
-            class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('cor')?.invalid"
-          />
-          <div class="error-message" *ngIf="submitted && veiculoForm.get('cor')?.invalid">
-            Cor é obrigatória
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="categoria">Categoria *</label>
-          <select
-            id="categoria"
-            formControlName="categoria"
-            class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('categoria')?.invalid"
-          >
-            <option value="">Selecione uma categoria</option>
-            <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
-          </select>
-          <div class="error-message" *ngIf="submitted && veiculoForm.get('categoria')?.invalid">
-            Categoria é obrigatória
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Documentos e Identificação</h3>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="chassi">Chassi *</label>
-          <input
-            id="chassi"
-            type="text"
-            formControlName="chassi"
-            class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('chassi')?.invalid"
-          />
-          <div class="error-message" *ngIf="submitted && veiculoForm.get('chassi')?.invalid">
-            Chassi é obrigatório
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="renavam">Renavam *</label>
-          <input
-            id="renavam"
-            type="text"
-            formControlName="renavam"
-            class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('renavam')?.invalid"
-          />
-          <div class="error-message" *ngIf="submitted && veiculoForm.get('renavam')?.invalid">
-            Renavam é obrigatório
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Especificações Técnicas</h3>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="capacidadeCarga">Capacidade de Carga (kg) *</label>
-          <input
-            id="capacidadeCarga"
-            type="number"
-            formControlName="capacidadeCarga"
-            class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('capacidadeCarga')?.invalid"
-          />
-          <div
-            class="error-message"
-            *ngIf="submitted && veiculoForm.get('capacidadeCarga')?.invalid"
-          >
-            Capacidade de carga é obrigatória
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('ano')?.invalid">
+            Ano é obrigatório
           </div>
         </div>
 
@@ -173,31 +86,19 @@
         </div>
 
         <div class="form-group">
-          <label for="valorDiaria">Valor da Diária (R$) *</label>
-          <input
-            id="valorDiaria"
-            type="number"
-            step="0.01"
-            formControlName="valorDiaria"
+          <label for="status">Status *</label>
+          <select
+            id="status"
+            formControlName="status"
             class="form-control"
-            [class.is-invalid]="submitted && veiculoForm.get('valorDiaria')?.invalid"
-          />
-          <div class="error-message" *ngIf="submitted && veiculoForm.get('valorDiaria')?.invalid">
-            Valor da diária é obrigatório
+            [class.is-invalid]="submitted && veiculoForm.get('status')?.invalid"
+          >
+            <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+          </select>
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('status')?.invalid">
+            Status é obrigatório
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Observações</h3>
-      <div class="form-group full-width">
-        <textarea
-          formControlName="observacoes"
-          rows="4"
-          placeholder="Observações sobre o veículo..."
-          class="form-control"
-        ></textarea>
       </div>
     </div>
 

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MotoristaService } from '../../services/motorista.service';
 
 @Component({
   selector: 'app-cadastro-motorista',
@@ -17,50 +18,19 @@ export class CadastroMotoristaComponent {
   loading = false;
 
   categoriasCnh = ['A', 'B', 'C', 'D', 'E'];
-  estados = [
-    'AC',
-    'AL',
-    'AP',
-    'AM',
-    'BA',
-    'CE',
-    'DF',
-    'ES',
-    'GO',
-    'MA',
-    'MT',
-    'MS',
-    'MG',
-    'PA',
-    'PB',
-    'PR',
-    'PE',
-    'PI',
-    'RJ',
-    'RN',
-    'RS',
-    'RO',
-    'RR',
-    'SC',
-    'SP',
-    'SE',
-    'TO',
-  ];
+  statusOptions = ['Disponivel', 'EmViagem', 'Ferias'];
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private motoristaService: MotoristaService,
+    private router: Router
+  ) {
     this.motoristaForm = this.fb.group({
-      nome: ['', Validators.required],
-      cpf: ['', [Validators.required, Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)]],
-      cnh: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.minLength(3)]],
+      cnh: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       categoriaCnh: ['', Validators.required],
-      dataNascimento: ['', Validators.required],
-      telefone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      endereco: ['', Validators.required],
-      cidade: ['', Validators.required],
-      estado: ['', Validators.required],
-      cep: ['', [Validators.required, Validators.pattern(/^\d{5}-\d{3}$/)]],
-      observacoes: [''],
+      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)]],
+      status: ['Disponivel', Validators.required],
     });
   }
 
@@ -69,12 +39,18 @@ export class CadastroMotoristaComponent {
 
     if (this.motoristaForm.valid) {
       this.loading = true;
-      // Simular cadastro
-      setTimeout(() => {
-        this.loading = false;
-        alert('Motorista cadastrado com sucesso!');
-        this.router.navigate(['/frota']);
-      }, 1000);
+
+      this.motoristaService.criarMotorista(this.motoristaForm.value).subscribe({
+        next: (motorista) => {
+          this.loading = false;
+          alert('Motorista cadastrado com sucesso!');
+          this.router.navigate(['/frota']);
+        },
+        error: (error) => {
+          this.loading = false;
+          alert('Erro ao cadastrar motorista: ' + error.message);
+        },
+      });
     }
   }
 
@@ -82,29 +58,21 @@ export class CadastroMotoristaComponent {
     this.router.navigate(['/frota']);
   }
 
-  formatarCPF(event: any): void {
+  // Máscara para telefone
+  formatarTelefone(event: any): void {
     let value = event.target.value.replace(/\D/g, '');
     if (value.length > 11) value = value.substring(0, 11);
 
-    if (value.length > 9) {
-      value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    if (value.length > 10) {
+      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
     } else if (value.length > 6) {
-      value = value.replace(/(\d{3})(\d{3})(\d{3})/, '$1.$2.$3');
-    } else if (value.length > 3) {
-      value = value.replace(/(\d{3})(\d{3})/, '$1.$2');
+      value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 2) {
+      value = value.replace(/(\d{2})(\d{4})/, '($1) $2');
+    } else if (value.length > 0) {
+      value = value.replace(/(\d{2})/, '($1)');
     }
 
-    this.motoristaForm.patchValue({ cpf: value });
-  }
-
-  formatarCEP(event: any): void {
-    let value = event.target.value.replace(/\D/g, '');
-    if (value.length > 8) value = value.substring(0, 8);
-
-    if (value.length > 5) {
-      value = value.replace(/(\d{5})(\d{3})/, '$1-$2');
-    }
-
-    this.motoristaForm.patchValue({ cep: value });
+    this.motoristaForm.patchValue({ telefone: value });
   }
 }

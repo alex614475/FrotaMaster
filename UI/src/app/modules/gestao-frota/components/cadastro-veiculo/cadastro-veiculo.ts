@@ -17,8 +17,8 @@ export class CadastroVeiculoComponent {
   submitted = false;
   loading = false;
 
-  categorias = ['Leve', 'Medio', 'Pesado'];
   marcas = ['Volvo', 'Mercedes-Benz', 'Scania', 'Volkswagen', 'Ford', 'Iveco', 'DAF'];
+  statusOptions = ['Disponivel', 'EmManutencao', 'EmUso'];
 
   constructor(
     private fb: FormBuilder,
@@ -29,18 +29,12 @@ export class CadastroVeiculoComponent {
       placa: ['', [Validators.required, Validators.pattern(/^[A-Z]{3}-[0-9]{4}$/)]],
       modelo: ['', Validators.required],
       marca: ['', Validators.required],
-      anoFabricacao: [
+      ano: [
         '',
         [Validators.required, Validators.min(2000), Validators.max(new Date().getFullYear())],
       ],
-      cor: ['', Validators.required],
-      chassi: ['', Validators.required],
-      renavam: ['', Validators.required],
-      categoria: ['', Validators.required],
-      capacidadeCarga: ['', [Validators.required, Validators.min(0)]],
       quilometragem: ['', [Validators.required, Validators.min(0)]],
-      valorDiaria: ['', [Validators.required, Validators.min(0)]],
-      observacoes: [''],
+      status: ['Disponivel', Validators.required],
     });
   }
 
