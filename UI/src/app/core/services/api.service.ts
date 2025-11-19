@@ -2,14 +2,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-const API_URL = 'http://localhost:5165/api';
+import { environment } from '../../../environments/environment'; // Importe o environment
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = API_URL;
+  private baseUrl = environment.apiUrl; // Use a URL do environment
 
   constructor(private http: HttpClient) {}
 

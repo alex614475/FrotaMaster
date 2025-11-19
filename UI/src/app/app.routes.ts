@@ -13,8 +13,8 @@ export const routes: Routes = [
   {
     path: 'cadastro-veiculo',
     loadComponent: () =>
-      import('./modules/gestao-frota/components/cadastro-veiculo/cadastro-veiculo').then(
-        (c) => c.CadastroVeiculoComponent
+      import('./modules/gestao-frota/components/cadastro-veiculo/veiculo-form.component').then(
+        (c) => c.VeiculoFormComponent
       ),
   },
   {

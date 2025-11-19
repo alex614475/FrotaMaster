@@ -1,5 +1,5 @@
 // src/environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7001/api', // URL da sua API .NET
+  apiUrl: 'http://localhost:5165/api', // ← Já está correto
 };

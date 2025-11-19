@@ -21,6 +21,18 @@ builder.Services.AddSwaggerGen(c =>
 // Infrastructure (DbContext, repositórios, etc.)
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Configuração do CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -33,7 +45,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// Removemos o UseHttpsRedirection para evitar o aviso e porque estamos usando HTTP
+// app.UseHttpsRedirection();
+
+// Usar CORS
+app.UseCors("AllowAngular");
 
 app.MapControllers();
 

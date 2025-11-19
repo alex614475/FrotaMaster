@@ -1,45 +1,32 @@
 // src/app/modules/gestao-frota/services/motorista.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-
-export interface Motorista {
-  id?: number;
-  nome: string;
-  cpf: string;
-  cnh: string;
-  categoriaCnh: string;
-  dataNascimento: Date;
-  telefone: string;
-  email: string;
-}
+import { ApiService } from '../../../core/services/api.service';
+import { Motorista } from '../../../models/motorista.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MotoristaService {
-  private apiUrl = `${environment.apiUrl}/motoristas`;
-
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   criarMotorista(motorista: Motorista): Observable<Motorista> {
-    return this.http.post<Motorista>(this.apiUrl, motorista);
+    return this.api.post<Motorista>('Motorista', motorista);
   }
 
   listarMotoristas(): Observable<Motorista[]> {
-    return this.http.get<Motorista[]>(this.apiUrl);
+    return this.api.get<Motorista[]>('Motorista');
   }
 
   obterMotorista(id: number): Observable<Motorista> {
-    return this.http.get<Motorista>(`${this.apiUrl}/${id}`);
+    return this.api.get<Motorista>(`Motorista/${id}`);
   }
 
   atualizarMotorista(id: number, motorista: Motorista): Observable<Motorista> {
-    return this.http.put<Motorista>(`${this.apiUrl}/${id}`, motorista);
+    return this.api.put<Motorista>(`Motorista/${id}`, motorista);
   }
 
-  excluirMotorista(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deletarMotorista(id: number): Observable<any> {
+    return this.api.delete(`Motorista/${id}`);
   }
 }

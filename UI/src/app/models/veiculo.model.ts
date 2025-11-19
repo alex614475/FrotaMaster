@@ -1,9 +1,11 @@
 export interface Veiculo {
-  id?: number;
+  id: number;
   placa: string;
   modelo: string;
   marca: string;
   ano: number;
   quilometragem: number;
-  status: 'Disponivel' | 'EmManutencao' | 'EmUso';
+  status: string;
+  manutencoes: any[];
+  rotas: any[];
 }
