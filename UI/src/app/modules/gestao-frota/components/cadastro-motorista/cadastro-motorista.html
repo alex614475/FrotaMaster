@@ -1,0 +1,221 @@
+<!-- src/app/modules/gestao-frota/components/cadastro-motorista/cadastro-motorista.component.html -->
+<div class="container">
+  <div class="header">
+    <h2>👤 Cadastro de Motorista</h2>
+    <button class="btn btn-secondary" (click)="onCancel()">← Voltar</button>
+  </div>
+
+  <form [formGroup]="motoristaForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="form-section">
+      <h3>Informações Pessoais</h3>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="nome">Nome Completo *</label>
+          <input
+            id="nome"
+            type="text"
+            formControlName="nome"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('nome')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('nome')?.invalid">
+            Nome é obrigatório
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cpf">CPF *</label>
+          <input
+            id="cpf"
+            type="text"
+            formControlName="cpf"
+            class="form-control"
+            placeholder="000.000.000-00"
+            (input)="formatarCPF($event)"
+            [class.is-invalid]="submitted && motoristaForm.get('cpf')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('cpf')?.invalid">
+            CPF é obrigatório (formato: 000.000.000-00)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dataNascimento">Data de Nascimento *</label>
+          <input
+            id="dataNascimento"
+            type="date"
+            formControlName="dataNascimento"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('dataNascimento')?.invalid"
+          />
+          <div
+            class="error-message"
+            *ngIf="submitted && motoristaForm.get('dataNascimento')?.invalid"
+          >
+            Data de nascimento é obrigatória
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>CNH e Contato</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cnh">Número da CNH *</label>
+          <input
+            id="cnh"
+            type="text"
+            formControlName="cnh"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('cnh')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('cnh')?.invalid">
+            CNH é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="categoriaCnh">Categoria CNH *</label>
+          <select
+            id="categoriaCnh"
+            formControlName="categoriaCnh"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('categoriaCnh')?.invalid"
+          >
+            <option value="">Selecione a categoria</option>
+            <option *ngFor="let cat of categoriasCnh" [value]="cat">Categoria {{ cat }}</option>
+          </select>
+          <div
+            class="error-message"
+            *ngIf="submitted && motoristaForm.get('categoriaCnh')?.invalid"
+          >
+            Categoria da CNH é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone *</label>
+          <input
+            id="telefone"
+            type="tel"
+            formControlName="telefone"
+            class="form-control"
+            placeholder="(00) 00000-0000"
+            [class.is-invalid]="submitted && motoristaForm.get('telefone')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('telefone')?.invalid">
+            Telefone é obrigatório
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="email">E-mail *</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('email')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('email')?.invalid">
+            E-mail é obrigatório e deve ser válido
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Endereço</h3>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="endereco">Endereço Completo *</label>
+          <input
+            id="endereco"
+            type="text"
+            formControlName="endereco"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('endereco')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('endereco')?.invalid">
+            Endereço é obrigatório
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cidade">Cidade *</label>
+          <input
+            id="cidade"
+            type="text"
+            formControlName="cidade"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('cidade')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('cidade')?.invalid">
+            Cidade é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="estado">Estado *</label>
+          <select
+            id="estado"
+            formControlName="estado"
+            class="form-control"
+            [class.is-invalid]="submitted && motoristaForm.get('estado')?.invalid"
+          >
+            <option value="">Selecione o estado</option>
+            <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+          </select>
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('estado')?.invalid">
+            Estado é obrigatório
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cep">CEP *</label>
+          <input
+            id="cep"
+            type="text"
+            formControlName="cep"
+            class="form-control"
+            placeholder="00000-000"
+            (input)="formatarCEP($event)"
+            [class.is-invalid]="submitted && motoristaForm.get('cep')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && motoristaForm.get('cep')?.invalid">
+            CEP é obrigatório (formato: 00000-000)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Observações</h3>
+      <div class="form-group full-width">
+        <textarea
+          formControlName="observacoes"
+          rows="4"
+          placeholder="Observações sobre o motorista..."
+          class="form-control"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Cadastrando...' : 'Cadastrar Motorista' }}
+      </button>
+    </div>
+  </form>
+</div>

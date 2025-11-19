@@ -11,7 +11,11 @@ import { RouterModule } from '@angular/router';
     <nav class="navbar">
       <div class="nav-content">
         <h1>🚗 FrotaMaster - Sistema de Gestão</h1>
-        <a routerLink="/frota" class="nav-link"> 📊 Gestão de Frota </a>
+        <div class="nav-links">
+          <a routerLink="/frota" class="nav-link">📊 Gestão de Frota</a>
+          <a routerLink="/cadastro-veiculo" class="nav-link">➕ Cadastrar Veículo</a>
+          <a routerLink="/cadastro-motorista" class="nav-link">👤 Cadastrar Motorista</a>
+        </div>
       </div>
     </nav>
 
@@ -39,6 +43,11 @@ import { RouterModule } from '@angular/router';
       h1 {
         margin: 0;
         font-size: 1.5rem;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1rem;
       }
 
       .nav-link {

@@ -1,5 +1,3 @@
-// src/app/core/mocks/veiculos.mock.ts
-
 import { Veiculo } from '../../models/veiculo.model';
 
 export const VEICULOS_MOCK: Veiculo[] = [
@@ -9,11 +7,16 @@ export const VEICULOS_MOCK: Veiculo[] = [
     modelo: 'Volvo FH 540',
     marca: 'Volvo',
     anoFabricacao: 2022,
+    cor: 'Branco',
+    chassi: '9BRBLWHEXG0107721',
+    renavam: '00123456789',
     status: 'Disponivel',
-    ultimaManutencao: new Date('2024-01-15'),
-    proximaManutencao: new Date('2024-07-15'),
+    categoria: 'Pesado',
+    capacidadeCarga: 25000,
     quilometragem: 125000,
     valorDiaria: 450.0,
+    ultimaManutencao: new Date('2024-01-15'),
+    proximaManutencao: new Date('2024-07-15'),
   },
   {
     id: 2,
@@ -21,11 +24,16 @@ export const VEICULOS_MOCK: Veiculo[] = [
     modelo: 'Mercedes-Benz Actros',
     marca: 'Mercedes',
     anoFabricacao: 2023,
+    cor: 'Azul',
+    chassi: '9BRBLWHEXG0107722',
+    renavam: '00123456780',
     status: 'Alugado',
-    ultimaManutencao: new Date('2024-02-20'),
-    proximaManutencao: new Date('2024-08-20'),
+    categoria: 'Pesado',
+    capacidadeCarga: 30000,
     quilometragem: 85000,
     valorDiaria: 520.0,
+    ultimaManutencao: new Date('2024-02-20'),
+    proximaManutencao: new Date('2024-08-20'),
   },
   {
     id: 3,
@@ -33,10 +41,15 @@ export const VEICULOS_MOCK: Veiculo[] = [
     modelo: 'Scania R 450',
     marca: 'Scania',
     anoFabricacao: 2021,
+    cor: 'Vermelho',
+    chassi: '9BRBLWHEXG0107723',
+    renavam: '00123456781',
     status: 'Manutencao',
-    ultimaManutencao: new Date('2024-03-10'),
-    proximaManutencao: new Date('2024-09-10'),
+    categoria: 'Pesado',
+    capacidadeCarga: 28000,
     quilometragem: 185000,
     valorDiaria: 420.0,
+    ultimaManutencao: new Date('2024-03-10'),
+    proximaManutencao: new Date('2024-09-10'),
   },
 ];

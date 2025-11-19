@@ -1,13 +1,20 @@
+// src/app/core/models/veiculo.model.ts
 export interface Veiculo {
-  id: number;
+  id?: number;
   placa: string;
   modelo: string;
   marca: string;
   anoFabricacao: number;
-  status: 'Disponivel' | 'Alugado' | 'Manutencao';
-  ultimaManutencao: Date;
-  proximaManutencao: Date;
+  cor: string;
+  chassi: string;
+  renavam: string;
+  status: 'Disponivel' | 'Alugado' | 'Manutencao' | 'Inativo';
+  categoria: 'Leve' | 'Medio' | 'Pesado';
+  capacidadeCarga: number;
   quilometragem: number;
   valorDiaria: number;
+  ultimaManutencao?: Date;
+  proximaManutencao?: Date;
   observacoes?: string;
+  dataCadastro?: Date;
 }

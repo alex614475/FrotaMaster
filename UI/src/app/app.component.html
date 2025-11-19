@@ -1,11 +1,16 @@
-<!-- src/app/app.component.html -->
+// No AppComponent, atualize o template: template: `
 <nav class="navbar">
   <div class="nav-content">
     <h1>🚗 FrotaMaster - Sistema de Gestão</h1>
-    <a routerLink="/frota" class="nav-link"> 📊 Gestão de Frota </a>
+    <div class="nav-links">
+      <a routerLink="/frota" class="nav-link">📊 Gestão de Frota</a>
+      <a routerLink="/cadastro-veiculo" class="nav-link">➕ Cadastrar Veículo</a>
+      <a routerLink="/cadastro-motorista" class="nav-link">👤 Cadastrar Motorista</a>
+    </div>
   </div>
 </nav>
 
 <main class="main-content">
   <router-outlet></router-outlet>
 </main>
+`

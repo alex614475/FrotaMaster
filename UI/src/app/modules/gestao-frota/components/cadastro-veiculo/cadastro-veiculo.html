@@ -1,0 +1,211 @@
+<!-- src/app/modules/gestao-frota/components/cadastro-veiculo/cadastro-veiculo.component.html -->
+<div class="container">
+  <div class="header">
+    <h2>🚗 Cadastro de Veículo</h2>
+    <button class="btn btn-secondary" (click)="onCancel()">← Voltar</button>
+  </div>
+
+  <form [formGroup]="veiculoForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="form-section">
+      <h3>Informações Básicas</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="placa">Placa *</label>
+          <input
+            id="placa"
+            type="text"
+            formControlName="placa"
+            placeholder="ABC-1234"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('placa')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('placa')?.invalid">
+            Placa é obrigatória (formato: ABC-1234)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="marca">Marca *</label>
+          <select
+            id="marca"
+            formControlName="marca"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('marca')?.invalid"
+          >
+            <option value="">Selecione uma marca</option>
+            <option *ngFor="let marca of marcas" [value]="marca">{{ marca }}</option>
+          </select>
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('marca')?.invalid">
+            Marca é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modelo">Modelo *</label>
+          <input
+            id="modelo"
+            type="text"
+            formControlName="modelo"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('modelo')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('modelo')?.invalid">
+            Modelo é obrigatório
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="anoFabricacao">Ano de Fabricação *</label>
+          <input
+            id="anoFabricacao"
+            type="number"
+            formControlName="anoFabricacao"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('anoFabricacao')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('anoFabricacao')?.invalid">
+            Ano de fabricação é obrigatório
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cor">Cor *</label>
+          <input
+            id="cor"
+            type="text"
+            formControlName="cor"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('cor')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('cor')?.invalid">
+            Cor é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="categoria">Categoria *</label>
+          <select
+            id="categoria"
+            formControlName="categoria"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('categoria')?.invalid"
+          >
+            <option value="">Selecione uma categoria</option>
+            <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+          </select>
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('categoria')?.invalid">
+            Categoria é obrigatória
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Documentos e Identificação</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="chassi">Chassi *</label>
+          <input
+            id="chassi"
+            type="text"
+            formControlName="chassi"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('chassi')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('chassi')?.invalid">
+            Chassi é obrigatório
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="renavam">Renavam *</label>
+          <input
+            id="renavam"
+            type="text"
+            formControlName="renavam"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('renavam')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('renavam')?.invalid">
+            Renavam é obrigatório
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Especificações Técnicas</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="capacidadeCarga">Capacidade de Carga (kg) *</label>
+          <input
+            id="capacidadeCarga"
+            type="number"
+            formControlName="capacidadeCarga"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('capacidadeCarga')?.invalid"
+          />
+          <div
+            class="error-message"
+            *ngIf="submitted && veiculoForm.get('capacidadeCarga')?.invalid"
+          >
+            Capacidade de carga é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="quilometragem">Quilometragem *</label>
+          <input
+            id="quilometragem"
+            type="number"
+            formControlName="quilometragem"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('quilometragem')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('quilometragem')?.invalid">
+            Quilometragem é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="valorDiaria">Valor da Diária (R$) *</label>
+          <input
+            id="valorDiaria"
+            type="number"
+            step="0.01"
+            formControlName="valorDiaria"
+            class="form-control"
+            [class.is-invalid]="submitted && veiculoForm.get('valorDiaria')?.invalid"
+          />
+          <div class="error-message" *ngIf="submitted && veiculoForm.get('valorDiaria')?.invalid">
+            Valor da diária é obrigatório
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Observações</h3>
+      <div class="form-group full-width">
+        <textarea
+          formControlName="observacoes"
+          rows="4"
+          placeholder="Observações sobre o veículo..."
+          class="form-control"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Cadastrando...' : 'Cadastrar Veículo' }}
+      </button>
+    </div>
+  </form>
+</div>

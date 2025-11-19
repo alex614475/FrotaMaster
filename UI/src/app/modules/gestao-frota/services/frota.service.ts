@@ -1,84 +1,21 @@
-// src/app/core/services/veiculo.service.ts
+// src/app/modules/gestao-frota/services/frota.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay, catchError } from 'rxjs/operators';
-import { ApiService } from '../../../core/services/api.service';
+import { Observable } from 'rxjs';
 
-export interface Veiculo {
-  id: number;
-  placa: string;
-  modelo: string;
-  marca: string;
-  anoFabricacao: number;
-  status: 'Disponivel' | 'Alugado' | 'Manutencao';
-  ultimaManutencao: string; // API geralmente retorna string
-  proximaManutencao: string;
-  quilometragem: number;
-  valorDiaria: number;
-  observacoes?: string;
-}
+import { VeiculoService } from './veiculo.service'; // ← Importar do módulo, não do core
+import { Veiculo } from '../../../models/veiculo.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class VeiculoService {
-  constructor(private api: ApiService) {}
+export class FrotaService {
+  constructor(private veiculoService: VeiculoService) {}
 
   getVeiculos(): Observable<Veiculo[]> {
-    return this.api.get<Veiculo[]>('veiculos').pipe(
-      catchError((error) => {
-        console.warn('Erro ao buscar veículos da API, usando mock:', error);
-        // Fallback para dados mock se a API não estiver pronta
-        return this.getVeiculosMock();
-      })
-    );
+    return this.veiculoService.listarVeiculos();
   }
 
   getVeiculoById(id: number): Observable<Veiculo> {
-    return this.api.get<Veiculo>(`veiculos/${id}`);
-  }
-
-  criarVeiculo(veiculo: Veiculo): Observable<Veiculo> {
-    return this.api.post<Veiculo>('veiculos', veiculo);
-  }
-
-  atualizarVeiculo(id: number, veiculo: Veiculo): Observable<Veiculo> {
-    return this.api.put<Veiculo>(`veiculos/${id}`, veiculo);
-  }
-
-  deletarVeiculo(id: number): Observable<any> {
-    return this.api.delete(`veiculos/${id}`);
-  }
-
-  // Mock temporário enquanto a API não está completamente pronta
-  private getVeiculosMock(): Observable<Veiculo[]> {
-    const mockVeiculos: Veiculo[] = [
-      {
-        id: 1,
-        placa: 'ABC-1234',
-        modelo: 'Volvo FH 540',
-        marca: 'Volvo',
-        anoFabricacao: 2022,
-        status: 'Disponivel',
-        ultimaManutencao: '2024-01-15',
-        proximaManutencao: '2024-07-15',
-        quilometragem: 125000,
-        valorDiaria: 450.0,
-      },
-      {
-        id: 2,
-        placa: 'DEF-5678',
-        modelo: 'Mercedes-Benz Actros',
-        marca: 'Mercedes',
-        anoFabricacao: 2023,
-        status: 'Alugado',
-        ultimaManutencao: '2024-02-20',
-        proximaManutencao: '2024-08-20',
-        quilometragem: 85000,
-        valorDiaria: 520.0,
-      },
-    ];
-
-    return of(mockVeiculos).pipe(delay(500));
+    return this.veiculoService.obterVeiculo(id);
   }
 }

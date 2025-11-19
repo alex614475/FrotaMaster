@@ -2,14 +2,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./modules/dashboard/components/dashboard-home/dashboard-home.component').then(
-        (c) => c.DashboardHomeComponent
-      ),
-  },
+  { path: '', redirectTo: '/frota', pathMatch: 'full' },
   {
     path: 'frota',
     loadComponent: () =>
@@ -17,5 +10,19 @@ export const routes: Routes = [
         (c) => c.ListaVeiculosComponent
       ),
   },
-  { path: '**', redirectTo: '/dashboard' },
+  {
+    path: 'cadastro-veiculo',
+    loadComponent: () =>
+      import('./modules/gestao-frota/components/cadastro-veiculo/cadastro-veiculo').then(
+        (c) => c.CadastroVeiculoComponent
+      ),
+  },
+  {
+    path: 'cadastro-motorista',
+    loadComponent: () =>
+      import('./modules/gestao-frota/components/cadastro-motorista/cadastro-motorista').then(
+        (c) => c.CadastroMotoristaComponent
+      ),
+  },
+  { path: '**', redirectTo: '/frota' },
 ];
