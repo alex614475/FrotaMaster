@@ -1,35 +1,61 @@
 <div class="min-h-screen bg-gray-100 font-sans">
   <!-- Main -->
   <div class="container mx-auto p-6">
+    <!-- Cards de status -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Veículos em Rota -->
       <div class="bg-white rounded shadow p-6 text-center">
         <div class="text-gray-500 uppercase text-sm mb-2">Veículos em Rota</div>
         <div class="text-4xl font-bold text-blue-700">{{ veiculosRota }}</div>
       </div>
 
-      <!-- Veículos em Manutenção -->
       <div class="bg-white rounded shadow p-6 text-center">
         <div class="text-gray-500 uppercase text-sm mb-2">Veículos em Manutenção</div>
         <div class="text-4xl font-bold text-red-600">{{ veiculosManutencao }}</div>
       </div>
 
-      <!-- Motoristas Ativos -->
       <div class="bg-white rounded shadow p-6 text-center">
         <div class="text-gray-500 uppercase text-sm mb-2">Motoristas Ativos</div>
         <div class="text-4xl font-bold text-green-600">{{ motoristasAtivos }}</div>
       </div>
     </div>
 
-    <!-- Cards adicionais (opcional) -->
+    <!-- Grid: Cards adicionais + Mapa -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-lg font-semibold mb-2">Atividades Recentes</h3>
-        <p class="text-gray-600">Nenhuma atividade recente para exibir.</p>
+      <!-- Coluna esquerda: Cards -->
+      <div class="space-y-6">
+        <div class="bg-white rounded shadow p-6">
+          <h3 class="text-lg font-semibold mb-2">Atividades Recentes</h3>
+          <p class="text-gray-600">Nenhuma atividade recente para exibir.</p>
+        </div>
+
+        <div class="bg-white rounded shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Distribuição da Frota</h3>
+          <div class="space-y-3">
+            @for (veiculo of distribuicaoVeiculos; track veiculo.cidade) {
+            <div
+              class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border-l-4 border-blue-500"
+            >
+              <div>
+                <h4 class="font-medium text-gray-800">{{ veiculo.cidade }}</h4>
+                <p class="text-sm text-gray-600">
+                  {{ veiculo.tipoVeiculo }} - {{ veiculo.motorista }}
+                </p>
+              </div>
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              >
+                Ativo
+              </span>
+            </div>
+            }
+          </div>
+        </div>
       </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-lg font-semibold mb-2">Alertas de Frota</h3>
-        <p class="text-gray-600">Todos os veículos estão em condições normais.</p>
+
+      <!-- Coluna direita: Mapa -->
+      <div class="bg-white rounded shadow p-6 h-full">
+        <h3 class="text-lg font-semibold mb-2">Mapa dos Veículos em Rota</h3>
+        <div id="map" class="w-full h-96 rounded"></div>
       </div>
     </div>
   </div>
