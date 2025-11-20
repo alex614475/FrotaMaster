@@ -11,5 +11,10 @@ namespace FrotaMaster.Domain.Entities
         public string Destino { get; set; } = string.Empty;
         public string Status { get; set; } = "Agendada";
         public string Carga { get; set; } = string.Empty;
+        public string Cidade { get; set; } = string.Empty;        
+        public string TipoVeiculo { get; set; } = string.Empty;   
+        public string MotoristaNome { get; set; } = string.Empty;    
+        public List<DistribuicaoRota> Distribuicoes { get; set; } = new();
+        
     }
 }
