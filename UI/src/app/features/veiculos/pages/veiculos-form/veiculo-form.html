@@ -1,56 +1,69 @@
-<div class="container">
-  <h2>🚗 Cadastro de Veículo</h2>
+<!-- veiculo-form.component.html -->
+<div class="flex h-screen bg-gray-100">
+  <div class="m-auto w-full max-w-lg">
+    <div class="mt-5 bg-white rounded-lg shadow px-5 py-5">
+      <h2 class="text-2xl font-semibold mb-4">Cadastro de Veículo</h2>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-row">
-      <label>Placa *</label>
+      <input formControlName="placa" placeholder="Placa (ABC-1234)" class="input-style" />
+      <div
+        *ngIf="veiculoForm.get('placa')?.touched && veiculoForm.get('placa')?.invalid"
+        class="text-red-600 text-sm"
+      >
+        Placa inválida
+      </div>
+
+      <input formControlName="modelo" placeholder="Modelo" class="input-style" />
+      <div
+        *ngIf="veiculoForm.get('modelo')?.touched && veiculoForm.get('modelo')?.invalid"
+        class="text-red-600 text-sm"
+      >
+        Modelo obrigatório
+      </div>
+
+      <input formControlName="marca" placeholder="Marca" class="input-style" />
+      <div
+        *ngIf="veiculoForm.get('marca')?.touched && veiculoForm.get('marca')?.invalid"
+        class="text-red-600 text-sm"
+      >
+        Marca obrigatória
+      </div>
+
+      <input type="number" formControlName="ano" placeholder="Ano" class="input-style" />
+      <div
+        *ngIf="veiculoForm.get('ano')?.touched && veiculoForm.get('ano')?.invalid"
+        class="text-red-600 text-sm"
+      >
+        Ano inválido
+      </div>
+
       <input
-        type="text"
-        formControlName="placa"
-        placeholder="ABC-1234"
-        (input)="aplicarMascaraPlaca($event)"
-        [class.is-invalid]="submitted && form.get('placa')?.invalid"
+        type="number"
+        formControlName="quilometragem"
+        placeholder="Quilometragem"
+        class="input-style"
       />
-      <div class="error" *ngIf="submitted && form.get('placa')?.invalid">Placa inválida.</div>
-    </div>
+      <div
+        *ngIf="
+          veiculoForm.get('quilometragem')?.touched && veiculoForm.get('quilometragem')?.invalid
+        "
+        class="text-red-600 text-sm"
+      >
+        Quilometragem inválida
+      </div>
 
-    <div class="form-row">
-      <label>Marca *</label>
-      <select formControlName="marca">
-        <option value="">Selecione</option>
-        <option *ngFor="let marca of marcas" [value]="marca">{{ marca }}</option>
-      </select>
-    </div>
+      <div class="flex items-center pt-3">
+        <input
+          type="checkbox"
+          formControlName="status"
+          class="w-4 h-4 text-black bg-gray-300 border-none rounded-md focus:ring-transparent"
+        />
+        <label class="ml-2 text-sm text-gray-900">Ativo</label>
+      </div>
 
-    <div class="form-row">
-      <label>Modelo *</label>
-      <input type="text" formControlName="modelo" />
+      <div class="flex flex-row-reverse mt-5">
+        <button (click)="salvar()" class="btn-save">Salvar</button>
+        <button (click)="cancelar()" class="btn-cancel mr-3">Cancelar</button>
+      </div>
     </div>
-
-    <div class="form-row">
-      <label>Ano *</label>
-      <input type="number" formControlName="ano" />
-    </div>
-
-    <div class="form-row">
-      <label>Quilometragem *</label>
-      <input type="number" formControlName="quilometragem" />
-    </div>
-
-    <div class="form-row">
-      <label>Status *</label>
-      <select formControlName="status">
-        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
-      </select>
-    </div>
-
-    <div class="form-row">
-      <label>Cor *</label>
-      <input type="text" formControlName="cor" />
-    </div>
-
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Salvando...' : 'Salvar' }}
-    </button>
-  </form>
+  </div>
 </div>

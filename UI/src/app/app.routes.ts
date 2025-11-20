@@ -13,12 +13,25 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'veiculos/cadastro',
+    loadComponent: () =>
+      import('./features/veiculos/pages/veiculos-form/veiculo-form').then(
+        (c) => c.VeiculoFormComponent
+      ),
+  },
+  {
     path: 'motoristas',
     loadComponent: () =>
       import('./features/motorista/pages/motorista-list/lista-motoristas').then(
         (c) => c.ListaMotoristasComponent
       ),
   },
-
+  {
+    path: 'motoristas/cadastro',
+    loadComponent: () =>
+      import('./features/motorista/pages/motorista-form/motorista-form').then(
+        (c) => c.MotoristaFormComponent
+      ),
+  },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

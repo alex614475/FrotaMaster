@@ -1,77 +1,65 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { VeiculoService } from '../../services/veiculo.service';
+import { Component } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { VeiculoService } from '../../services/veiculo.service';
+import { Veiculo } from '../../../../models/veiculo.model';
 
 @Component({
   selector: 'app-veiculo-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './veiculo-form.html',
 })
-export class VeiculoFormComponent implements OnInit {
-  form!: FormGroup;
-  submitted = false;
-  loading = false;
-
-  marcas = ['Volvo', 'Mercedes-Benz', 'Scania', 'Volkswagen', 'Ford', 'Iveco', 'DAF'];
-  statusOptions = ['Disponivel', 'EmManutencao', 'EmUso'];
+export class VeiculoFormComponent {
+  veiculoForm;
 
   constructor(
     private fb: FormBuilder,
     private veiculoService: VeiculoService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      placa: ['', [Validators.required, Validators.pattern(/^[A-Z]{3}-?[0-9]{4}$/)]],
-      marca: ['', Validators.required],
+  ) {
+    // inicializa o form dentro do construtor
+    this.veiculoForm = this.fb.group({
+      placa: ['', [Validators.required, Validators.pattern(/^[A-Z]{3}-\d{4}$/i)]],
       modelo: ['', Validators.required],
+      marca: ['', Validators.required],
       ano: [
         '',
-        [Validators.required, Validators.min(1980), Validators.max(new Date().getFullYear())],
+        [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
       ],
-      quilometragem: ['', [Validators.required, Validators.min(0)]],
-      status: ['Disponivel', Validators.required],
-      cor: ['', Validators.required],
+      quilometragem: [0, [Validators.required, Validators.min(0)]],
+      status: ['Ativo', Validators.required],
     });
   }
 
-  aplicarMascaraPlaca(event: any) {
-    let valor = event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    if (valor.length > 3) valor = valor.slice(0, 3) + '-' + valor.slice(3);
-    event.target.value = valor;
+  salvar() {
+    if (this.veiculoForm.valid) {
+      const formValue = this.veiculoForm.value;
+      const veiculo: Veiculo = {
+        id: 0,
+        placa: formValue.placa!,
+        modelo: formValue.modelo!,
+        marca: formValue.marca!,
+        ano: Number(formValue.ano),
+        quilometragem: Number(formValue.quilometragem),
+        status: formValue.status!,
+        manutencoes: [],
+        rotas: [],
+      };
+      this.veiculoService.criarVeiculo(veiculo).subscribe({
+        next: () => {
+          alert('Veículo criado com sucesso!');
+          this.router.navigate(['/veiculos']);
+        },
+        error: (err) => console.error(err),
+      });
+    } else {
+      this.veiculoForm.markAllAsTouched();
+    }
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    if (this.form.invalid) return;
-
-    this.loading = true;
-
-    const dados = {
-      ...this.form.value,
-      placa: this.form.value.placa.replace('-', ''),
-    };
-
-    this.veiculoService.criarVeiculo(dados).subscribe({
-      next: () => {
-        this.loading = false;
-        alert('Veículo cadastrado com sucesso!');
-        this.router.navigate(['/frota']);
-      },
-      error: (error) => {
-        this.loading = false;
-        alert('Erro ao cadastrar veículo: ' + error.message);
-      },
-    });
+  cancelar() {
+    this.router.navigate(['/veiculos']);
   }
 }

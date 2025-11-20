@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Veiculo } from '../../../../models/veiculo.model';
 import { VeiculoService } from '../../services/veiculo.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-veiculos',
@@ -13,11 +14,12 @@ import { VeiculoService } from '../../services/veiculo.service';
 export class ListaVeiculosComponent {
   veiculos$: Observable<Veiculo[]>;
 
-  constructor(private veiculoService: VeiculoService) {
+  constructor(private veiculoService: VeiculoService, private router: Router) {
     this.veiculos$ = this.veiculoService.listarVeiculos();
   }
 
   onCadastrar() {
-    console.log('Cadastrar veículo clicado');
+    this.router.navigate(['/veiculos/cadastro']);
+    console.log('Cadastrar Veículo clicado');
   }
 }
