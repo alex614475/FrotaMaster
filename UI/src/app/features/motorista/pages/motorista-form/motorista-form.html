@@ -1,62 +1,112 @@
-<div class="flex h-screen bg-gray-100">
-  <div class="m-auto w-full max-w-lg">
-    <div class="mt-5 bg-white rounded-lg shadow px-5 py-5">
-      <h2 class="text-2xl font-semibold mb-4">Cadastro de Motorista</h2>
+<div class="max-w-lg mx-auto p-6 bg-white shadow rounded-md">
+  <h2 class="text-2xl font-bold mb-6">👤 Cadastro de Motorista</h2>
 
-      <input formControlName="nome" placeholder="Nome" class="input-style" />
-      <div
-        *ngIf="motoristaForm.get('nome')?.touched && motoristaForm.get('nome')?.invalid"
-        class="text-red-600 text-sm"
-      >
-        Nome obrigatório
-      </div>
-
-      <input formControlName="cnh" placeholder="CNH" class="input-style" />
-      <div
-        *ngIf="motoristaForm.get('cnh')?.touched && motoristaForm.get('cnh')?.invalid"
-        class="text-red-600 text-sm"
-      >
-        CNH obrigatória
-      </div>
-
-      <select formControlName="categoriaCNH" class="input-style">
-        <option value="">Selecione a categoria</option>
-        <option *ngFor="let cat of categoriasCNH" [value]="cat">{{ cat }}</option>
-      </select>
-      <div
-        *ngIf="
-          motoristaForm.get('categoriaCNH')?.touched && motoristaForm.get('categoriaCNH')?.invalid
-        "
-        class="text-red-600 text-sm"
-      >
-        Categoria obrigatória
-      </div>
-
+  <form [formGroup]="motoristaForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <!-- Nome -->
+    <div>
+      <label class="block font-medium mb-1">Nome *</label>
       <input
-        formControlName="telefone"
-        placeholder="Telefone (99 99999-9999)"
-        class="input-style"
+        type="text"
+        formControlName="nome"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && motoristaForm.get('nome')?.invalid"
       />
       <div
-        *ngIf="motoristaForm.get('telefone')?.touched && motoristaForm.get('telefone')?.invalid"
-        class="text-red-600 text-sm"
+        class="text-red-500 text-sm mt-1"
+        *ngIf="submitted && motoristaForm.get('nome')?.invalid"
       >
-        Telefone inválido
-      </div>
-
-      <div class="flex items-center pt-3">
-        <input
-          type="checkbox"
-          formControlName="status"
-          class="w-4 h-4 text-black bg-gray-300 border-none rounded-md focus:ring-transparent"
-        />
-        <label class="ml-2 text-sm text-gray-900">Ativo</label>
-      </div>
-
-      <div class="flex flex-row-reverse mt-5">
-        <button (click)="salvar()" class="btn-save">Salvar</button>
-        <button (click)="cancelar()" class="btn-cancel mr-3">Cancelar</button>
+        Nome é obrigatório (mínimo 3 caracteres)
       </div>
     </div>
-  </div>
+
+    <!-- CNH -->
+    <div>
+      <label class="block font-medium mb-1">CNH *</label>
+      <input
+        type="text"
+        formControlName="cnh"
+        placeholder="00000000000"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && motoristaForm.get('cnh')?.invalid"
+      />
+      <div class="text-red-500 text-sm mt-1" *ngIf="submitted && motoristaForm.get('cnh')?.invalid">
+        CNH é obrigatória (11 dígitos)
+      </div>
+    </div>
+
+    <!-- Categoria CNH -->
+    <div>
+      <label class="block font-medium mb-1">Categoria CNH *</label>
+      <select
+        formControlName="categoriaCnh"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && motoristaForm.get('categoriaCnh')?.invalid"
+      >
+        <option value="">Selecione</option>
+        <option *ngFor="let cat of categoriasCnh" [value]="cat">{{ cat }}</option>
+      </select>
+      <div
+        class="text-red-500 text-sm mt-1"
+        *ngIf="submitted && motoristaForm.get('categoriaCnh')?.invalid"
+      >
+        Categoria da CNH é obrigatória
+      </div>
+    </div>
+
+    <!-- Telefone -->
+    <div>
+      <label class="block font-medium mb-1">Telefone *</label>
+      <input
+        type="text"
+        formControlName="telefone"
+        placeholder="(11) 99999-9999"
+        (input)="formatarTelefone($event)"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && motoristaForm.get('telefone')?.invalid"
+      />
+      <div
+        class="text-red-500 text-sm mt-1"
+        *ngIf="submitted && motoristaForm.get('telefone')?.invalid"
+      >
+        Telefone é obrigatório
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div>
+      <label class="block font-medium mb-1">Status *</label>
+      <select
+        formControlName="status"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && motoristaForm.get('status')?.invalid"
+      >
+        <option value="">Selecione</option>
+        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+      </select>
+      <div
+        class="text-red-500 text-sm mt-1"
+        *ngIf="submitted && motoristaForm.get('status')?.invalid"
+      >
+        Status é obrigatório
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="flex justify-end space-x-2 mt-4">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="px-4 py-2 rounded bg-gray-500 text-white hover:bg-gray-600"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+      >
+        {{ loading ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </form>
 </div>

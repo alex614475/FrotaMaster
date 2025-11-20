@@ -1,9 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MotoristaService } from '../../services/motorista.service';
-import { Motorista } from '../../../../models/motorista.model';
 
 @Component({
   selector: 'app-motorista-form',
@@ -11,49 +10,70 @@ import { Motorista } from '../../../../models/motorista.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './motorista-form.html',
 })
-export class MotoristaFormComponent {
-  motoristaForm;
-  categoriasCNH = ['A', 'B', 'C', 'D', 'E'];
+export class CadastroMotoristaComponent {
+  motoristaForm: FormGroup;
+  submitted = false;
+  loading = false;
+
+  categoriasCnh = ['A', 'B', 'C', 'D', 'E'];
+  statusOptions = ['Disponivel', 'EmViagem', 'Ferias'];
 
   constructor(
     private fb: FormBuilder,
     private motoristaService: MotoristaService,
     private router: Router
   ) {
-    // inicializa o form dentro do construtor
     this.motoristaForm = this.fb.group({
-      nome: ['', Validators.required],
-      cnh: ['', Validators.required],
-      categoriaCNH: ['', Validators.required],
-      telefone: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
-      status: ['Ativo', Validators.required],
+      nome: ['', [Validators.required, Validators.minLength(3)]],
+      cnh: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      categoriaCnh: ['', Validators.required],
+      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)]],
+      status: ['Disponivel', Validators.required],
     });
   }
 
-  salvar() {
+  // Chamado pelo (ngSubmit)
+  onSubmit(): void {
+    this.submitted = true;
+
     if (this.motoristaForm.valid) {
-      const formValue = this.motoristaForm.value;
-      const motorista: Motorista = {
-        nome: formValue.nome!,
-        cnh: formValue.cnh!,
-        categoriaCNH: formValue.categoriaCNH!,
-        telefone: formValue.telefone!,
-        status: formValue.status!,
-        rotas: [],
-      };
-      this.motoristaService.criarMotorista(motorista).subscribe({
+      this.loading = true;
+      this.motoristaService.criarMotorista(this.motoristaForm.value).subscribe({
         next: () => {
-          alert('Motorista criado com sucesso!');
+          this.loading = false;
+          alert('Motorista cadastrado com sucesso!');
           this.router.navigate(['/motoristas']);
         },
-        error: (err) => console.error(err),
+        error: (error) => {
+          this.loading = false;
+          alert('Erro ao cadastrar motorista: ' + error.message);
+        },
       });
     } else {
       this.motoristaForm.markAllAsTouched();
     }
   }
 
-  cancelar() {
+  // Chamado pelo botão Cancelar
+  onCancel(): void {
     this.router.navigate(['/motoristas']);
+  }
+
+  // Máscara para telefone
+  formatarTelefone(event: any): void {
+    let value = event.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.substring(0, 11);
+
+    if (value.length > 10) {
+      value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 6) {
+      value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 2) {
+      value = value.replace(/(\d{2})(\d{4})/, '($1) $2');
+    } else if (value.length > 0) {
+      value = value.replace(/(\d{2})/, '($1)');
+    }
+
+    this.motoristaForm.patchValue({ telefone: value });
   }
 }

@@ -30,7 +30,7 @@ export const routes: Routes = [
     path: 'motoristas/cadastro',
     loadComponent: () =>
       import('./features/motorista/pages/motorista-form/motorista-form').then(
-        (c) => c.MotoristaFormComponent
+        (c) => c.CadastroMotoristaComponent
       ),
   },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

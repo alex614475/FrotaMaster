@@ -1,69 +1,98 @@
-<!-- veiculo-form.component.html -->
-<div class="flex h-screen bg-gray-100">
-  <div class="m-auto w-full max-w-lg">
-    <div class="mt-5 bg-white rounded-lg shadow px-5 py-5">
-      <h2 class="text-2xl font-semibold mb-4">Cadastro de Veículo</h2>
+<div class="max-w-lg mx-auto p-6 bg-white shadow rounded-md">
+  <h2 class="text-2xl font-bold mb-6">🚗 Cadastro de Veículo</h2>
 
-      <input formControlName="placa" placeholder="Placa (ABC-1234)" class="input-style" />
-      <div
-        *ngIf="veiculoForm.get('placa')?.touched && veiculoForm.get('placa')?.invalid"
-        class="text-red-600 text-sm"
-      >
-        Placa inválida
+  <form [formGroup]="veiculoForm" (ngSubmit)="salvar()" class="space-y-4">
+    <!-- Placa -->
+    <div>
+      <label class="block font-medium mb-1">Placa *</label>
+      <input
+        type="text"
+        formControlName="placa"
+        placeholder="ABC-1234"
+        (input)="aplicarMascaraPlaca($event)"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && veiculoForm.get('placa')?.invalid"
+      />
+      <div class="text-red-500 text-sm mt-1" *ngIf="submitted && veiculoForm.get('placa')?.invalid">
+        Placa inválida.
       </div>
+    </div>
 
-      <input formControlName="modelo" placeholder="Modelo" class="input-style" />
-      <div
-        *ngIf="veiculoForm.get('modelo')?.touched && veiculoForm.get('modelo')?.invalid"
-        class="text-red-600 text-sm"
+    <!-- Marca -->
+    <div>
+      <label class="block font-medium mb-1">Marca *</label>
+      <select
+        formControlName="marca"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && veiculoForm.get('marca')?.invalid"
       >
-        Modelo obrigatório
-      </div>
+        <option value="">Selecione</option>
+        <option *ngFor="let marca of marcas" [value]="marca">{{ marca }}</option>
+      </select>
+    </div>
 
-      <input formControlName="marca" placeholder="Marca" class="input-style" />
-      <div
-        *ngIf="veiculoForm.get('marca')?.touched && veiculoForm.get('marca')?.invalid"
-        class="text-red-600 text-sm"
-      >
-        Marca obrigatória
-      </div>
+    <!-- Modelo -->
+    <div>
+      <label class="block font-medium mb-1">Modelo *</label>
+      <input
+        type="text"
+        formControlName="modelo"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && veiculoForm.get('modelo')?.invalid"
+      />
+    </div>
 
-      <input type="number" formControlName="ano" placeholder="Ano" class="input-style" />
-      <div
-        *ngIf="veiculoForm.get('ano')?.touched && veiculoForm.get('ano')?.invalid"
-        class="text-red-600 text-sm"
-      >
-        Ano inválido
-      </div>
+    <!-- Ano -->
+    <div>
+      <label class="block font-medium mb-1">Ano *</label>
+      <input
+        type="number"
+        formControlName="ano"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && veiculoForm.get('ano')?.invalid"
+      />
+    </div>
 
+    <!-- Quilometragem -->
+    <div>
+      <label class="block font-medium mb-1">Quilometragem *</label>
       <input
         type="number"
         formControlName="quilometragem"
-        placeholder="Quilometragem"
-        class="input-style"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && veiculoForm.get('quilometragem')?.invalid"
       />
-      <div
-        *ngIf="
-          veiculoForm.get('quilometragem')?.touched && veiculoForm.get('quilometragem')?.invalid
-        "
-        class="text-red-600 text-sm"
-      >
-        Quilometragem inválida
-      </div>
-
-      <div class="flex items-center pt-3">
-        <input
-          type="checkbox"
-          formControlName="status"
-          class="w-4 h-4 text-black bg-gray-300 border-none rounded-md focus:ring-transparent"
-        />
-        <label class="ml-2 text-sm text-gray-900">Ativo</label>
-      </div>
-
-      <div class="flex flex-row-reverse mt-5">
-        <button (click)="salvar()" class="btn-save">Salvar</button>
-        <button (click)="cancelar()" class="btn-cancel mr-3">Cancelar</button>
-      </div>
     </div>
-  </div>
+
+    <!-- Status -->
+    <div>
+      <label class="block font-medium mb-1">Status *</label>
+      <select
+        formControlName="status"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-red-500]="submitted && veiculoForm.get('status')?.invalid"
+      >
+        <option value="">Selecione</option>
+        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+      </select>
+    </div>
+
+    <!-- Botões -->
+    <div class="flex justify-end space-x-2 mt-4">
+      <button
+        type="button"
+        (click)="cancelar()"
+        class="px-4 py-2 rounded bg-gray-500 text-white hover:bg-gray-600"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+      >
+        {{ loading ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </form>
 </div>
