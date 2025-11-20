@@ -1,0 +1,70 @@
+<div class="p-6">
+  <!-- Cabeçalho + Botão -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Lista de Motoristas</h2>
+
+    <button
+      class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+      (click)="onCadastrar()"
+    >
+      Cadastrar Motorista
+    </button>
+  </div>
+
+  <!-- Tabela -->
+  <div class="overflow-x-auto shadow rounded-lg border border-gray-200">
+    <table class="min-w-full bg-white">
+      <thead class="bg-gray-100 border-b">
+        <tr>
+          <th class="px-4 py-3 text-left">Nome</th>
+          <th class="px-4 py-3 text-left">CNH</th>
+          <th class="px-4 py-3 text-left">Categoria</th>
+          <th class="px-4 py-3 text-left">Telefone</th>
+          <th class="px-4 py-3 text-left">Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let m of motoristas$ | async" class="border-b hover:bg-gray-50 transition">
+          <td class="px-4 py-3">{{ m.nome }}</td>
+          <td class="px-4 py-3">{{ m.cnh }}</td>
+          <td class="px-4 py-3">{{ m.categoriaCNH }}</td>
+          <td class="px-4 py-3">{{ m.telefone }}</td>
+
+          <!-- STATUS DINÂMICO -->
+          <td class="px-4 py-3">
+            <span
+              class="relative inline-block px-3 py-1 font-semibold leading-tight"
+              [ngClass]="{
+                'text-green-900': m.status === 'Disponivel',
+                'text-blue-900': m.status === 'EmRota',
+                'text-red-900': m.status === 'Inativo'
+              }"
+            >
+              <span
+                class="absolute inset-0 opacity-50 rounded-full"
+                [ngClass]="{
+                  'bg-green-200': m.status === 'Disponivel',
+                  'bg-blue-200': m.status === 'EmRota',
+                  'bg-red-200': m.status === 'Inativo'
+                }"
+              ></span>
+
+              <span class="relative">
+                {{
+                  m.status === 'Disponivel'
+                    ? 'Disponível'
+                    : m.status === 'EmRota'
+                    ? 'Em Rota'
+                    : m.status === 'Inativo'
+                    ? 'Inativo'
+                    : m.status
+                }}
+              </span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

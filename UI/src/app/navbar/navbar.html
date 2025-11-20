@@ -1,0 +1,85 @@
+<nav class="bg-gray-800/50">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- MENU DESKTOP -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          <a
+            routerLink="/dashboard"
+            routerLinkActive="bg-gray-950/50 text-white"
+            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+          >
+            Dashboard
+          </a>
+
+          <a
+            routerLink="/veiculos"
+            routerLinkActive="bg-gray-950/50 text-white"
+            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+          >
+            Veículos
+          </a>
+
+          <a
+            routerLink="/motoristas"
+            routerLinkActive="bg-gray-950/50 text-white"
+            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+          >
+            Motorista
+          </a>
+        </div>
+      </div>
+
+      <!-- ÍCONES DIREITA -->
+      <div class="hidden md:flex items-center space-x-4">
+        <!-- Ícone NOTIFICAÇÃO -->
+        <span class="text-yellow-300 text-xl">🔔</span>
+
+        <!-- Perfil -->
+        <button (click)="toggleProfile()" class="text-purple-300 text-xl">👤</button>
+
+        <!-- DROPDOWN -->
+        <div
+          *ngIf="openProfile"
+          class="absolute right-4 top-14 w-48 rounded-md bg-gray-800 py-2 shadow-lg ring-1 ring-black/5"
+        >
+          <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5">Perfil</a>
+          <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5">Configurações</a>
+          <a class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5">Sair</a>
+        </div>
+      </div>
+
+      <!-- BOTÃO MOBILE -->
+      <div class="md:hidden">
+        <button (click)="toggleMobile()" class="text-gray-300 text-2xl">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU MOBILE -->
+  <div *ngIf="openMobile" class="md:hidden px-2 pt-2 pb-3 space-y-1">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="bg-gray-950/50 text-white"
+      class="block rounded-md px-3 py-2 text-gray-300 hover:bg-white/5"
+    >
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/veiculos"
+      routerLinkActive="bg-gray-950/50 text-white"
+      class="block rounded-md px-3 py-2 text-gray-300 hover:bg-white/5"
+    >
+      Veículos
+    </a>
+
+    <a
+      routerLink="/motoristas"
+      routerLinkActive="bg-gray-950/50 text-white"
+      class="block rounded-md px-3 py-2 text-gray-300 hover:bg-white/5"
+    >
+      Motorista
+    </a>
+  </div>
+</nav>

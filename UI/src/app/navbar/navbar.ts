@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
+  selector: 'app-navbar',
   standalone: true,
-  selector: 'app-dashboard',
-  imports: [CommonModule],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css',
+  imports: [CommonModule, RouterLink, RouterLinkActive],
+  templateUrl: './navbar.html',
 })
-export class Dashboard {
+export class NavbarComponent {
   openMobile = false;
   openProfile = false;
 
