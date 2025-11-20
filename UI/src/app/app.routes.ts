@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
+    loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.DashboardComponent),
   },
   {
     path: 'veiculos',

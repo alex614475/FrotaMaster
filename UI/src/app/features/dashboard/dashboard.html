@@ -1,1 +1,36 @@
-<h1 class="text-3xl font-bold text-white">Dashboard</h1>
+<div class="min-h-screen bg-gray-100 font-sans">
+  <!-- Main -->
+  <div class="container mx-auto p-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Veículos em Rota -->
+      <div class="bg-white rounded shadow p-6 text-center">
+        <div class="text-gray-500 uppercase text-sm mb-2">Veículos em Rota</div>
+        <div class="text-4xl font-bold text-blue-700">{{ veiculosRota }}</div>
+      </div>
+
+      <!-- Veículos em Manutenção -->
+      <div class="bg-white rounded shadow p-6 text-center">
+        <div class="text-gray-500 uppercase text-sm mb-2">Veículos em Manutenção</div>
+        <div class="text-4xl font-bold text-red-600">{{ veiculosManutencao }}</div>
+      </div>
+
+      <!-- Motoristas Ativos -->
+      <div class="bg-white rounded shadow p-6 text-center">
+        <div class="text-gray-500 uppercase text-sm mb-2">Motoristas Ativos</div>
+        <div class="text-4xl font-bold text-green-600">{{ motoristasAtivos }}</div>
+      </div>
+    </div>
+
+    <!-- Cards adicionais (opcional) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      <div class="bg-white rounded shadow p-6">
+        <h3 class="text-lg font-semibold mb-2">Atividades Recentes</h3>
+        <p class="text-gray-600">Nenhuma atividade recente para exibir.</p>
+      </div>
+      <div class="bg-white rounded shadow p-6">
+        <h3 class="text-lg font-semibold mb-2">Alertas de Frota</h3>
+        <p class="text-gray-600">Todos os veículos estão em condições normais.</p>
+      </div>
+    </div>
+  </div>
+</div>

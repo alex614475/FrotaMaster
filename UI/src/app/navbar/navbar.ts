@@ -9,14 +9,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './navbar.html',
 })
 export class NavbarComponent {
-  openMobile = false;
   openProfile = false;
-
-  toggleMobile() {
-    this.openMobile = !this.openMobile;
-  }
+  openMobile = false;
 
   toggleProfile() {
     this.openProfile = !this.openProfile;
+  }
+
+  toggleMobile() {
+    this.openMobile = !this.openMobile;
   }
 }
