@@ -1,11 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
-  imports: [CommonModule], // ← Adicione esta linha
 })
 export class DashboardComponent implements AfterViewInit {
   veiculosRota = 5;
@@ -13,10 +11,27 @@ export class DashboardComponent implements AfterViewInit {
   motoristasAtivos = 3;
 
   distribuicaoVeiculos = [
-    { cidade: 'São Paulo', tipoVeiculo: 'Caminhão', motorista: 'João Silva' },
-    { cidade: 'Rio de Janeiro', tipoVeiculo: 'Carro', motorista: 'Maria Santos' },
-    { cidade: 'Barreiras', tipoVeiculo: 'Caminhão', motorista: 'Pedro Oliveira' },
-    { cidade: 'Luís Eduardo Magalhães', tipoVeiculo: 'Carro', motorista: 'Ana Costa' },
+    { cidade: 'São Paulo', tipoVeiculo: 'Caminhão', motorista: 'João Silva', status: 'Ativo' },
+    {
+      cidade: 'Rio de Janeiro',
+      tipoVeiculo: 'Carro',
+      motorista: 'Maria Santos',
+      status: 'Em Atraso',
+    },
+    {
+      cidade: 'Barreiras',
+      tipoVeiculo: 'Caminhão',
+      motorista: 'Pedro Oliveira',
+      status: 'Manutenção',
+    },
+    {
+      cidade: 'Luís Eduardo Magalhães',
+      tipoVeiculo: 'Carro',
+      motorista: 'Ana Costa',
+      status: 'Ativo',
+    },
+    { cidade: 'Brasília', tipoVeiculo: 'Caminhão', motorista: 'Carlos Souza', status: 'Em Atraso' },
+    { cidade: 'Salvador', tipoVeiculo: 'Carro', motorista: 'Juliana Lima', status: 'Ativo' },
   ];
 
   ngAfterViewInit(): void {
@@ -55,5 +70,33 @@ export class DashboardComponent implements AfterViewInit {
       const icon = v.tipo === 'truck' ? truckIcon : carIcon;
       L.marker([v.lat, v.lng], { icon }).addTo(map).bindPopup(v.nome);
     });
+  }
+
+  // Método para definir a cor da borda esquerda com base no status
+  getBorderColor(status: string): string {
+    switch (status) {
+      case 'Ativo':
+        return 'border-l-4 border-green-500';
+      case 'Em Atraso':
+        return 'border-l-4 border-yellow-500';
+      case 'Manutenção':
+        return 'border-l-4 border-red-500';
+      default:
+        return 'border-l-4 border-gray-500';
+    }
+  }
+
+  // Método para definir a classe do badge de status
+  getStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'Ativo':
+        return 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800';
+      case 'Em Atraso':
+        return 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800';
+      case 'Manutenção':
+        return 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800';
+      default:
+        return 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800';
+    }
   }
 }
