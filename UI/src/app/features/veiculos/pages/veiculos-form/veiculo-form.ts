@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VeiculoService } from '../../services/veiculo.service';
 import { Veiculo } from '../../../../models/veiculo.model';
 
@@ -11,10 +11,11 @@ import { Veiculo } from '../../../../models/veiculo.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './veiculo-form.html',
 })
-export class VeiculoFormComponent {
+export class VeiculoFormComponent implements OnInit {
   veiculoForm: FormGroup;
   submitted = false;
   loading = false;
+  veiculoId: number | null = null;
 
   marcas = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Volkswagen'];
   statusOptions = ['Ativo', 'Inativo', 'Manutenção'];
@@ -22,7 +23,8 @@ export class VeiculoFormComponent {
   constructor(
     private fb: FormBuilder,
     private veiculoService: VeiculoService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.veiculoForm = this.fb.group({
       placa: ['', [Validators.required, Validators.pattern(/^[A-Z]{3}-\d{4}$/i)]],
@@ -37,37 +39,82 @@ export class VeiculoFormComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
+      if (idParam) {
+        const id = Number(idParam);
+        if (!isNaN(id)) {
+          this.veiculoId = id;
+          this.carregarVeiculo(id);
+        }
+      }
+    });
+  }
+
+  carregarVeiculo(id: number) {
+    this.veiculoService.obterVeiculo(id).subscribe({
+      next: (veiculo: Veiculo) => {
+        this.veiculoForm.patchValue({
+          placa: veiculo.placa,
+          modelo: veiculo.modelo,
+          marca: veiculo.marca,
+          ano: veiculo.ano,
+          quilometragem: veiculo.quilometragem,
+          status: veiculo.status,
+        });
+      },
+      error: (err) => {
+        alert('Erro ao carregar veículo: ' + err.message);
+        this.router.navigate(['/veiculos']);
+      },
+    });
+  }
+
   salvar(): void {
     this.submitted = true;
-
     if (this.veiculoForm.valid) {
       this.loading = true;
       const formValue = this.veiculoForm.value;
       const veiculo: Veiculo = {
-        id: 0,
+        id: this.veiculoId || 0,
         placa: formValue.placa,
         modelo: formValue.modelo,
         marca: formValue.marca,
         ano: Number(formValue.ano),
         quilometragem: Number(formValue.quilometragem),
         status: formValue.status,
-
         manutencoes: [],
         rotas: [],
       };
 
-      this.veiculoService.criarVeiculo(veiculo).subscribe({
-        next: () => {
-          this.loading = false;
-          alert('Veículo criado com sucesso!');
-          this.router.navigate(['/veiculos']);
-        },
-        error: (err) => {
-          this.loading = false;
-          console.error(err);
-          alert('Erro ao salvar veículo: ' + err.message);
-        },
-      });
+      if (this.veiculoId) {
+        // Edição
+        this.veiculoService.atualizarVeiculo(this.veiculoId, veiculo).subscribe({
+          next: () => {
+            this.loading = false;
+            alert('Veículo atualizado com sucesso!');
+            this.router.navigate(['/veiculos']);
+          },
+          error: (err) => {
+            this.loading = false;
+            alert('Erro ao atualizar veículo: ' + err.message);
+          },
+        });
+      } else {
+        // Cadastro
+        this.veiculoService.criarVeiculo(veiculo).subscribe({
+          next: () => {
+            this.loading = false;
+            alert('Veículo criado com sucesso!');
+            this.router.navigate(['/veiculos']);
+          },
+          error: (err) => {
+            this.loading = false;
+            alert('Erro ao criar veículo: ' + err.message);
+          },
+        });
+      }
     }
   }
 

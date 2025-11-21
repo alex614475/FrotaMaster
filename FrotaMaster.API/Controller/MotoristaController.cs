@@ -23,7 +23,6 @@ namespace FrotaMaster.API.Controllers
             await _repo.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = motorista.Id }, motorista);
         }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Motorista motorista)
         {
@@ -32,6 +31,7 @@ namespace FrotaMaster.API.Controllers
             await _repo.SaveChangesAsync();
             return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

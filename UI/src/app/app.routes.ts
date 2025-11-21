@@ -20,6 +20,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'veiculos/editar/:id', // edição
+    loadComponent: () =>
+      import('./features/veiculos/pages/veiculos-form/veiculo-form').then(
+        (c) => c.VeiculoFormComponent
+      ),
+  },
+  {
     path: 'motoristas',
     loadComponent: () =>
       import('./features/motorista/pages/motorista-list/lista-motoristas').then(
@@ -40,6 +47,7 @@ export const routes: Routes = [
         (c) => c.CadastroMotoristaComponent
       ),
   },
+
   {
     path: 'distribuicao',
     loadComponent: () =>

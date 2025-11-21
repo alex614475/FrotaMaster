@@ -22,4 +22,8 @@ export class ListaVeiculosComponent {
     this.router.navigate(['/veiculos/cadastro']);
     console.log('Cadastrar Veículo clicado');
   }
+
+  onEditar(id: number) {
+    this.router.navigate(['/veiculos/editar/', id]);
+  }
 }

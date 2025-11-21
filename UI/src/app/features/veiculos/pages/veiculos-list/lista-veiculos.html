@@ -22,6 +22,7 @@
           <th class="px-4 py-3 text-left">Ano</th>
           <th class="px-4 py-3 text-left">KM</th>
           <th class="px-4 py-3 text-left">Status</th>
+          <th class="px-4 py-3 text-left"></th>
         </tr>
       </thead>
 
@@ -64,6 +65,14 @@
                 }}
               </span>
             </span>
+          </td>
+          <td class="px-4 py-3">
+            <button
+              (click)="onEditar(v.id!)"
+              class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+            >
+              Editar
+            </button>
           </td>
         </tr>
       </tbody>
