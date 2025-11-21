@@ -1,46 +1,59 @@
-// src/app/features/distribuicao-da-frota/pages/distribuicao-da-frota-form/distribuicao-da-frota-form.ts
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
-
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RotaService } from '../../services/rota.service';
-import { Rota } from '../../../../models/rota.model';
+import { DistribuicaoDaFrotaService } from '../../services/distribuicao-da-frota.service';
 
 @Component({
   selector: 'app-distribuicao-da-frota-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './distribuicao-da-frota-form.component.html',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './distribuicao-da-frota-form.html',
 })
-export class DistribuicaoDaFrotaFormComponent implements OnInit {
-  rotaForm!: FormGroup;
+export class DistribuicaoDaFrotaFormComponent {
+  form: FormGroup;
+  submitted = false;
+  loading = false;
 
-  constructor(private fb: FormBuilder, private rotaService: RotaService, private router: Router) {}
+  statusOptions = ['Pendente', 'Em Andamento', 'Concluída', 'Cancelada'];
 
-  ngOnInit(): void {
-    this.rotaForm = this.fb.group({
-      veiculoId: [null, Validators.required],
-      motoristaId: [null, Validators.required],
-      origem: ['', Validators.required],
-      destino: ['', Validators.required],
-      status: ['Agendada', Validators.required],
-      carga: ['', Validators.required],
+  constructor(
+    private fb: FormBuilder,
+    private service: DistribuicaoDaFrotaService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({
+      rotaId: ['', Validators.required],
+      latitude: ['', Validators.required],
+      longitude: ['', Validators.required],
+      dataDistribuicao: [new Date().toISOString().split('T')[0], Validators.required],
+      status: ['Pendente'],
+      observacao: [''],
     });
   }
 
   salvar() {
-    if (this.rotaForm.invalid) return;
+    this.submitted = true;
 
-    const rota: Rota = this.rotaForm.value;
-    this.rotaService.criarRota(rota).subscribe(() => {
-      this.router.navigate(['/distribuicao-da-frota-list']);
+    if (this.form.invalid) return;
+
+    this.loading = true;
+
+    this.service.create(this.form.value).subscribe({
+      next: () => {
+        this.loading = false;
+        alert('Distribuição registrada com sucesso!');
+        this.router.navigate(['/distribuicao-da-frota-list']);
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error(err);
+        alert('Erro ao salvar: ' + err.message);
+      },
     });
+  }
+
+  cancelar() {
+    this.router.navigate(['/distribuicao-da-frota-list']);
   }
 }

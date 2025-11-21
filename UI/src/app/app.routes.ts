@@ -33,5 +33,19 @@ export const routes: Routes = [
         (c) => c.CadastroMotoristaComponent
       ),
   },
+  {
+    path: 'distribuicao',
+    loadComponent: () =>
+      import(
+        './features/distribuicao-da-frota/pages/distribuicao-da-frota-list/distribuicao-da-frota-list'
+      ).then((m) => m.DistribuicaoDaFrotaListComponent),
+  },
+  {
+    path: 'distribuicao-da-frota-form',
+    loadComponent: () =>
+      import(
+        './features/distribuicao-da-frota/pages/distribuicao-da-frota-form/distribuicao-da-frota-form'
+      ).then((m) => m.DistribuicaoDaFrotaFormComponent),
+  },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

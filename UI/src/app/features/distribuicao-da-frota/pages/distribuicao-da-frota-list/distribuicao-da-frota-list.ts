@@ -36,6 +36,6 @@ export class DistribuicaoDaFrotaListComponent {
   }
 
   navegarParaDetalhes(id: number) {
-    this.router.navigate(['/distribuicao-da-frota', id]);
+    this.router.navigate(['/distribuicao-da-frota/details', id]);
   }
 }
