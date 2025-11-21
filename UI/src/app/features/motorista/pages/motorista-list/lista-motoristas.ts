@@ -23,4 +23,9 @@ export class ListaMotoristasComponent {
   onCadastrar() {
     this.router.navigate(['/motoristas/cadastro']);
   }
+
+  onEditar(id: number) {
+    this.router.navigate(['/motoristas/editar', id]);
+    console.log(id);
+  }
 }

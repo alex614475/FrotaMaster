@@ -27,7 +27,14 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'motoristas/cadastro',
+    path: 'motoristas/cadastro', // cadastro
+    loadComponent: () =>
+      import('./features/motorista/pages/motorista-form/motorista-form').then(
+        (c) => c.CadastroMotoristaComponent
+      ),
+  },
+  {
+    path: 'motoristas/editar/:id', // edição
     loadComponent: () =>
       import('./features/motorista/pages/motorista-form/motorista-form').then(
         (c) => c.CadastroMotoristaComponent
