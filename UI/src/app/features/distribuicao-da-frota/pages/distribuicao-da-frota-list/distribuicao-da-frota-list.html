@@ -1,4 +1,5 @@
 <div class="p-6">
+  <!-- Cabeçalho + Botão -->
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold">Distribuição da Frota</h2>
 
@@ -10,37 +11,72 @@
     </button>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-      <thead class="bg-gray-100 text-left">
+  <!-- Tabela -->
+  <div class="overflow-x-auto shadow rounded-lg border border-gray-200">
+    <table class="min-w-full bg-white">
+      <thead class="bg-gray-100 border-b">
         <tr>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">Veículo</th>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">Motorista</th>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">Origem</th>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">Destino</th>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">Status</th>
-          <th class="px-6 py-3 text-sm font-medium text-gray-700">Ações</th>
+          <th class="px-6 py-3 text-left">ID</th>
+          <th class="px-6 py-3 text-left">Veículo</th>
+          <th class="px-6 py-3 text-left">Motorista</th>
+          <th class="px-6 py-3 text-left">Origem</th>
+          <th class="px-6 py-3 text-left">Destino</th>
+          <th class="px-6 py-3 text-left">Status</th>
+          <th class="px-6 py-3 text-left w-24">Ações</th>
         </tr>
       </thead>
+
       <tbody>
-        <tr *ngFor="let r of rotas$ | async" class="border-b hover:bg-gray-50 cursor-pointer">
+        <tr *ngFor="let r of rotas$ | async" class="border-b hover:bg-gray-50 transition">
           <td class="px-6 py-3">{{ r.id }}</td>
           <td class="px-6 py-3">{{ r.veiculoId }}</td>
           <td class="px-6 py-3">{{ r.motoristaId }}</td>
           <td class="px-6 py-3">{{ r.origem }}</td>
           <td class="px-6 py-3">{{ r.destino }}</td>
+
+          <!-- BADGE DE STATUS -->
           <td class="px-6 py-3">
             <span
-              [ngClass]="getStatusClass(r.status)"
-              class="px-2 py-1 rounded-full text-xs font-medium"
+              class="relative inline-block px-3 py-1 font-semibold leading-tight"
+              [ngClass]="{
+                'text-blue-900': r.status === 'Agendada' || r.status === 'Pendente',
+                'text-yellow-900': r.status === 'EmAndamento' || r.status === 'EmTransito',
+                'text-green-900': r.status === 'Concluida',
+                'text-red-900': r.status === 'Cancelada'
+              }"
             >
-              {{ r.status }}
+              <span
+                class="absolute inset-0 opacity-50 rounded-full"
+                [ngClass]="{
+                  'bg-blue-200': r.status === 'Agendada' || r.status === 'Pendente',
+                  'bg-yellow-200': r.status === 'EmAndamento' || r.status === 'EmTransito',
+                  'bg-green-200': r.status === 'Concluida',
+                  'bg-red-200': r.status === 'Cancelada'
+                }"
+              ></span>
+
+              <span class="relative">
+                {{
+                  r.status === 'Agendada'
+                    ? 'Agendada'
+                    : r.status === 'Pendente'
+                    ? 'Pendente'
+                    : r.status === 'EmAndamento'
+                    ? 'Em andamento'
+                    : r.status === 'EmTransito'
+                    ? 'Em trânsito'
+                    : r.status === 'Concluida'
+                    ? 'Concluída'
+                    : 'Cancelada'
+                }}
+              </span>
             </span>
           </td>
+
+          <!-- AÇÕES -->
           <td class="px-6 py-3">
             <button
-              class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition"
+              class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition"
               (click)="navegarParaDetalhes(r.id!)"
             >
               Detalhes

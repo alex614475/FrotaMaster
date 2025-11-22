@@ -47,6 +47,27 @@ export const routes: Routes = [
         (c) => c.CadastroMotoristaComponent
       ),
   },
+  {
+    path: 'manutencao',
+    loadComponent: () =>
+      import('./features/manutencao/pages/manutencao-list/manutencao-list').then(
+        (c) => c.ManutencaoListComponent
+      ),
+  },
+  {
+    path: 'manutencao/cadastro', // cadastro
+    loadComponent: () =>
+      import('./features/manutencao/pages/manutencao-form/manutencao-form').then(
+        (c) => c.ManutencaoFormComponent
+      ),
+  },
+  {
+    path: 'manutencao/editar/:id', // edição
+    loadComponent: () =>
+      import('./features/manutencao/pages/manutencao-form/manutencao-form').then(
+        (c) => c.ManutencaoFormComponent
+      ),
+  },
 
   {
     path: 'distribuicao',

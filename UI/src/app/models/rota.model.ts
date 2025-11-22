@@ -1,9 +1,10 @@
+import { Status } from './status.model';
 export interface Rota {
   id?: number;
   veiculoId: number;
   motoristaId: number;
   origem: string;
   destino: string;
-  status: 'Agendada' | 'EmTransito' | 'Concluida' | 'Cancelada';
+  status: Status;
   carga: string;
 }
