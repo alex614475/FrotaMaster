@@ -13,5 +13,8 @@ namespace FrotaMaster.Domain.Repositories
         Task UpdateAsync(Manutencao manutencao);
         Task DeleteAsync(int id);
         Task SaveChangesAsync();
+
+        Task<Manutencao?> GetByIdIncludingVeiculoAsync(int id);
+        Task<IEnumerable<Manutencao>> GetAllIncludingVeiculoAsync();
     }
 }

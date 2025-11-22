@@ -20,15 +20,14 @@ export class ManutencaoListComponent implements OnInit {
   ngOnInit(): void {
     this.manutencoes$ = this.manutencaoService.listarManutencoes();
 
-    // só para controlar loading:
     this.manutencoes$.subscribe({
-      complete: () => (this.loading = false),
+      next: () => (this.loading = false),
       error: () => (this.loading = false),
     });
   }
 
   onCadastrar() {
-    this.router.navigate(['/manutencao/novo']);
+    this.router.navigate(['/manutencao/cadastro']);
   }
 
   onEditar(id: number) {

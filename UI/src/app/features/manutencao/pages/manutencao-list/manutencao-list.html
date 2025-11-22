@@ -2,7 +2,6 @@
   <!-- Cabeçalho + Botão -->
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold">Manutenções de Veículos</h2>
-
     <button
       class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
       (click)="onCadastrar()"
@@ -10,7 +9,6 @@
       Nova Manutenção
     </button>
   </div>
-
   <!-- Tabela -->
   <div class="overflow-x-auto shadow rounded-lg border border-gray-200">
     <table class="min-w-full bg-white">
@@ -25,22 +23,16 @@
           <th class="px-4 py-3 text-left w-24"></th>
         </tr>
       </thead>
-
       <tbody>
         <tr *ngFor="let m of manutencoes$ | async" class="border-b hover:bg-gray-50 transition">
           <td class="px-4 py-3">{{ m.id }}</td>
-
-          <!-- ID do Veículo (ou você pode exibir placa, modelo etc.) -->
-          <td class="px-4 py-3">{{ m.veiculoId }}</td>
-
+          <!-- Exibe o modelo do veículo -->
+          <td class="px-4 py-3">{{ m.veiculoModelo }}</td>
           <td class="px-4 py-3">{{ m.tipo }}</td>
-
           <td class="px-4 py-3">
             <div class="max-w-xs truncate">{{ m.descricao }}</div>
           </td>
-
           <td class="px-4 py-3">R$ {{ m.custo | number : '1.2-2' }}</td>
-
           <!-- STATUS COM CORES -->
           <td class="px-4 py-3">
             <span
@@ -61,7 +53,6 @@
                   'bg-red-200': m.status === 'Cancelada'
                 }"
               ></span>
-
               <span class="relative">
                 {{
                   m.status === 'Agendada'
@@ -75,7 +66,6 @@
               </span>
             </span>
           </td>
-
           <!-- AÇÃO -->
           <td class="px-4 py-3">
             <button

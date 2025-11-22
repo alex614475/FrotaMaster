@@ -28,5 +28,20 @@ namespace FrotaMaster.Infrastructure.Repositories
             if (existing != null) _context.Entry(existing).CurrentValues.SetValues(manutencao);
         }
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+
+        public async Task<Manutencao?> GetByIdIncludingVeiculoAsync(int id)
+        {
+            return await _context.Manutencoes
+                .Include(m => m.Veiculo)
+                .FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<IEnumerable<Manutencao>> GetAllIncludingVeiculoAsync()
+        {
+            return await _context.Manutencoes
+                .Include(m => m.Veiculo)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }
