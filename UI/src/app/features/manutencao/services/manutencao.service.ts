@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
 import { Manutencao } from '../../../models/manutencao.model';
+import { Veiculo } from '../../../models/veiculo.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class ManutencaoService {
 
   constructor(private api: ApiService) {}
 
-  criarManutencao(manutencao: Manutencao): Observable<Manutencao> {
+  criarManutencao(manutencao: any): Observable<Manutencao> {
     return this.api.post<Manutencao>(this.endpoint, manutencao);
   }
 
@@ -19,11 +20,12 @@ export class ManutencaoService {
     return this.api.get<Manutencao[]>(this.endpoint);
   }
 
-  obterManutencao(id: number): Observable<Manutencao> {
-    return this.api.get<Manutencao>(`${this.endpoint}/${id}`);
+  // ✅ Ajuste aqui: inclui Veiculo no tipo
+  obterManutencao(id: number): Observable<Manutencao & { Veiculo: Veiculo }> {
+    return this.api.get<Manutencao & { Veiculo: Veiculo }>(`${this.endpoint}/${id}`);
   }
 
-  atualizarManutencao(id: number, manutencao: Manutencao): Observable<Manutencao> {
+  atualizarManutencao(id: number, manutencao: any): Observable<Manutencao> {
     return this.api.put<Manutencao>(`${this.endpoint}/${id}`, manutencao);
   }
 
