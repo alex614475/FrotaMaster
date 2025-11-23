@@ -44,14 +44,14 @@ export class DashboardComponent implements AfterViewInit {
     }).addTo(map);
 
     const truckIcon = L.icon({
-      iconUrl: '/imagens/truck.png',
+      iconUrl: 'assets/imagens/truck.png',
       iconSize: [40, 40],
       iconAnchor: [20, 40],
       popupAnchor: [0, -40],
     });
 
     const carIcon = L.icon({
-      iconUrl: '/imagens/car.png',
+      iconUrl: 'assets/imagens/car.png',
       iconSize: [30, 30],
       iconAnchor: [15, 30],
       popupAnchor: [0, -30],
