@@ -1,6 +1,7 @@
 ﻿using FrotaMaster.Infrastructure;
 using FrotaMaster.Application;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +40,25 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Swagger no modo dev
+
+// 🚀 **AUTO-MIGRATE NO RAILWAY**
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<FrotaMaster.Infrastructure.Persistence.FrotaMasterDbContext>();
+        db.Database.Migrate();
+        Console.WriteLine("✅ Migrações executadas com sucesso!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("❌ Erro ao aplicar migrations:");
+        Console.WriteLine(ex.Message);
+    }
+}
+
+
+// Swagger dev only
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -49,17 +68,17 @@ if (app.Environment.IsDevelopment())
 // CORS
 app.UseCors("AllowAngular");
 
-// 👉 Necessário para servir o FRONTEND Angular
+// 👉 Frontend Angular
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Rotas da API
+// API Controllers
 app.MapControllers();
 
-// Test
+// Test route
 app.MapGet("/ping", () => "FrotaMaster API rodando!");
 
-// 👉 Fallback para SPA Angular (ESSENCIAL)
+// 👉 SPA fallback
 app.MapFallbackToFile("index.html");
 
 app.Run();
