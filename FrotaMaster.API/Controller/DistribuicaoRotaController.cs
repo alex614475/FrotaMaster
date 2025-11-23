@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FrotaMaster.Domain.Entities;
 using FrotaMaster.Domain.Repositories;
-using FrotaMaster.API.DTOs;
+using FrotaMaster.Application.DTOs;
 using System.Threading.Tasks;
 
 namespace FrotaMaster.API.Controllers

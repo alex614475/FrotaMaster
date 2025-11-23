@@ -1,4 +1,4 @@
-namespace FrotaMaster.API.DTOs
+namespace FrotaMaster.Application.DTOs
 {
     // DTO para criação de Motorista
     public class CreateMotoristaRequest

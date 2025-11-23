@@ -1,4 +1,4 @@
-﻿namespace FrotaMaster.API.DTOs
+﻿namespace FrotaMaster.Application.DTOs
 {
     public class CreateManutencaoRequest
     {

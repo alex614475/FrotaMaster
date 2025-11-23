@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using FrotaMaster.Domain.Entities;
-using FrotaMaster.Domain.Repositories;
-using FrotaMaster.API.DTOs;
+using FrotaMaster.Application.Services;
+using FrotaMaster.Application.DTOs;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace FrotaMaster.API.Controllers
 {
@@ -11,52 +9,45 @@ namespace FrotaMaster.API.Controllers
     [Route("api/[controller]")]
     public class VeiculoController : ControllerBase
     {
-        private readonly IVeiculoRepository _repo;
-        public VeiculoController(IVeiculoRepository repo) => _repo = repo;
+        private readonly VeiculoService _service;
+
+        public VeiculoController(VeiculoService service)
+        {
+            _service = service;
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllAsync());
+        public async Task<IActionResult> GetAll()
+            => Ok(await _service.GetAllAsync());
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var veiculo = await _repo.GetByIdAsync(id);
-            return veiculo == null ? NotFound() : Ok(veiculo);
+            var result = await _service.GetByIdAsync(id);
+            return result == null ? NotFound() : Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateVeiculoRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateVeiculoRequest req)
         {
-            var veiculo = new Veiculo
-            {
-                Placa = request.Placa,
-                Modelo = request.Modelo,
-                Marca = request.Marca,
-                Ano = request.Ano,
-                Quilometragem = request.Quilometragem,
-                Status = request.Status
-            };
-
-            await _repo.AddAsync(veiculo);
-            await _repo.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = veiculo.Id }, veiculo);
+            var result = await _service.CreateAsync(req);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Veiculo veiculo)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateVeiculoRequest req)
         {
-            if (id != veiculo.Id) return BadRequest();
-            await _repo.UpdateAsync(veiculo);
-            await _repo.SaveChangesAsync();
-            return NoContent();
+            if (id != req.Id) return BadRequest();
+
+            var ok = await _service.UpdateAsync(req);
+            return ok ? NoContent() : NotFound();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _repo.DeleteAsync(id);
-            await _repo.SaveChangesAsync();
-            return NoContent();
+            var ok = await _service.DeleteAsync(id);
+            return ok ? NoContent() : NotFound();
         }
     }
 }

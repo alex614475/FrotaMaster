@@ -1,12 +1,13 @@
 using FrotaMaster.Infrastructure;
+using FrotaMaster.Application;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
+// Controllers
 builder.Services.AddControllers();
 
-// Swagger / OpenAPI
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -14,14 +15,17 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "FrotaMaster API",
         Version = "v1",
-        Description = "API para gerenciamento de frota de veículos"
+        Description = "API para gerenciamento de frota"
     });
 });
 
-// Infrastructure (DbContext, repositórios, etc.)
+// Application (use cases / serviços)
+builder.Services.AddApplication();
+
+// Infrastructure (DbContext + Repositórios)
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Configuração do CORS
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
@@ -35,25 +39,19 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
+// Swagger no modo dev
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "FrotaMaster API v1");
-    });
+    app.UseSwaggerUI();
 }
 
-// Removemos o UseHttpsRedirection para evitar o aviso e porque estamos usando HTTP
-// app.UseHttpsRedirection();
-
-// Usar CORS
+// CORS
 app.UseCors("AllowAngular");
 
 app.MapControllers();
 
-// Exemplo de endpoint simples (opcional)
+// Test route
 app.MapGet("/ping", () => "FrotaMaster API rodando!");
 
 app.Run();
