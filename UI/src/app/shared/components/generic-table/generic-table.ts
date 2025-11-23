@@ -18,6 +18,10 @@ export interface TableAction {
 
 export interface TableConfig {
   title: string;
+  addButton?: {
+    label: string;
+    icon?: string;
+  };
   showFilters?: boolean;
   showBatchActions?: boolean;
   showPagination?: boolean;

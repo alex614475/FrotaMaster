@@ -2,7 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { Veiculo } from '../../../../models/veiculo.model';
 import { VeiculoService } from '../../services/veiculo.service';
@@ -10,6 +11,7 @@ import {
   GenericTableComponent,
   TableColumn,
   TableAction,
+  TableConfig,
 } from '../../../../shared/components/generic-table/generic-table';
 
 @Component({
@@ -21,6 +23,16 @@ import {
 export class ListaVeiculosComponent implements OnInit {
   veiculos$!: Observable<Veiculo[]>;
 
+  tableConfig: TableConfig = {
+    title: 'Lista de Veiculos',
+    addButton: {
+      label: 'Adicionar Veículo',
+    },
+    showFilters: true,
+    showBatchActions: true,
+    showPagination: true,
+  };
+
   columns: TableColumn[] = [
     { field: 'placa', header: 'Placa' },
     { field: 'modelo', header: 'Modelo' },
@@ -29,28 +41,15 @@ export class ListaVeiculosComponent implements OnInit {
     {
       field: 'quilometragem',
       header: 'KM',
-      format: (v) => (v ? v.toLocaleString() : '0'),
+      format: (v) => (v ? v.toLocaleString('pt-BR') : '0'),
     },
   ];
 
   actions: TableAction[] = [
     {
-      icon: 'eye',
-      label: 'Detalhes',
-      class: 'bg-blue-500 hover:bg-blue-600',
-      onClick: (row) => this.onDetalhes(row.id),
-    },
-    {
-      icon: 'pencil',
       label: 'Editar',
-      class: 'bg-yellow-500 hover:bg-yellow-600',
+      class: 'bg-blue-600 hover:bg-blue-700',
       onClick: (row) => this.onEditar(row.id),
-    },
-    {
-      icon: 'trash',
-      label: 'Excluir',
-      class: 'bg-red-500 hover:bg-red-600',
-      onClick: (row) => this.onExcluir(row.id),
     },
   ];
 
@@ -61,7 +60,12 @@ export class ListaVeiculosComponent implements OnInit {
   }
 
   carregarVeiculos() {
-    this.veiculos$ = this.veiculoService.listarVeiculos();
+    this.veiculos$ = this.veiculoService.listarVeiculos().pipe(
+      catchError((error) => {
+        console.error('Erro ao carregar veículos:', error);
+        return of([]);
+      })
+    );
   }
 
   onCadastrar() {
@@ -72,21 +76,11 @@ export class ListaVeiculosComponent implements OnInit {
     this.router.navigate(['/veiculos/editar', id]);
   }
 
-  onExcluir(id: number) {
-    if (confirm('Deseja excluir este veículo?')) {
-      this.veiculoService.deletarVeiculo(id).subscribe({
-        next: () => {
-          this.carregarVeiculos(); // Recarrega a lista
-        },
-        error: (error) => {
-          console.error('Erro ao excluir veículo:', error);
-          alert('Erro ao excluir veículo');
-        },
-      });
-    }
-  }
-
   onDetalhes(id: number) {
     this.router.navigate(['/veiculos/detalhes', id]);
+  }
+
+  onAcaoEmLote() {
+    console.log('Ação em lote disparada');
   }
 }
