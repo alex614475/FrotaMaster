@@ -7,7 +7,10 @@ namespace FrotaMaster.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+
             services.AddScoped<VeiculoService>();
+            services.AddScoped<MotoristaService>();
+            services.AddScoped<ManutencaoService>();
             return services;
         }
     }
