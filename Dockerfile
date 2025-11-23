@@ -1,10 +1,9 @@
 # -------------------------
-# STAGE 1: Build
+# STAGE 1: Build BACKEND
 # -------------------------
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
-# Copia a solução e restaura
 COPY ./FrotaMaster.sln .
 
 COPY ./FrotaMaster.API/FrotaMaster.API.csproj ./FrotaMaster.API/
@@ -14,20 +13,31 @@ COPY ./FrotaMaster.Infrastructure/FrotaMaster.Infrastructure.csproj ./FrotaMaste
 
 RUN dotnet restore
 
-# Copia tudo e publica
 COPY . .
 RUN dotnet publish ./FrotaMaster.API/FrotaMaster.API.csproj -c Release -o /app/publish
 
 # -------------------------
-# STAGE 2: Runtime
+# STAGE 2: Build FRONTEND
+# -------------------------
+FROM node:20 AS frontend
+WORKDIR /app
+
+COPY ./UI/package*.json ./
+RUN npm install
+
+COPY ./UI .
+RUN npm run build -- --configuration production
+
+# -------------------------
+# STAGE 3: Runtime
 # -------------------------
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 COPY --from=build /app/publish .
+COPY --from=frontend /app/dist/frotamaster ./wwwroot/
 
 EXPOSE 8080
-
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 
 ENTRYPOINT ["dotnet", "FrotaMaster.API.dll"]
