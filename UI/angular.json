@@ -16,13 +16,10 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/frotamaster",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-
-            "assets": [
-              { "glob": "**/*", "input": "public" },
-              { "glob": "**/*", "input": "src/assets" }
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.css", "node_modules/leaflet/dist/leaflet.css"]
           },
           "configurations": {
