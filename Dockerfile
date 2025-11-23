@@ -26,7 +26,7 @@ COPY ./UI/package*.json ./
 RUN npm install
 
 COPY ./UI .
-RUN npm run build --configuration production
+RUN npm run build -- --configuration production
 
 # -------------------------
 # STAGE 3: Runtime
@@ -35,7 +35,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 COPY --from=build /app/publish .
-COPY --from=frontend /app/dist/frotamaster ./wwwroot/
+COPY --from=frontend /app/dist/frota-master ./wwwroot/
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
