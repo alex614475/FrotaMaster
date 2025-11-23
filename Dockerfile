@@ -1,8 +1,8 @@
-# -------------------------
-# STAGE 1: Build BACKEND
-# -------------------------
+# ============================
+# STAGE 1 — BACKEND (.NET 8)
+# ============================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /source
+WORKDIR /src
 
 COPY ./FrotaMaster.sln .
 
@@ -14,12 +14,14 @@ COPY ./FrotaMaster.Infrastructure/FrotaMaster.Infrastructure.csproj ./FrotaMaste
 RUN dotnet restore
 
 COPY . .
+
+# Publica a API
 RUN dotnet publish ./FrotaMaster.API/FrotaMaster.API.csproj -c Release -o /app/publish
 
 
-# -------------------------
-# STAGE 2: Build FRONTEND
-# -------------------------
+# ============================
+# STAGE 2 — FRONTEND Angular
+# ============================
 FROM node:20 AS frontend
 WORKDIR /app
 
@@ -27,20 +29,20 @@ COPY ./UI/package*.json ./
 RUN npm install
 
 COPY ./UI .
-RUN npm run build --configuration production
+RUN npm run build -- --configuration production
 
 
-# -------------------------
-# STAGE 3: Runtime
-# -------------------------
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# ============================
+# STAGE 3 — IMAGEM FINAL
+# ============================
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# Backend
+# Copia API
 COPY --from=build /app/publish .
 
-# Frontend (Angular)
-COPY --from=frontend /app/dist/frotamaster ./wwwroot/
+# Copia Angular compilado para wwwroot
+COPY --from=frontend /app/dist/FrotaMaster/browser ./wwwroot/
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
