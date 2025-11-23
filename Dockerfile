@@ -23,15 +23,11 @@ RUN dotnet publish ./FrotaMaster.API/FrotaMaster.API.csproj -c Release -o /app/p
 FROM node:20 AS frontend
 WORKDIR /app
 
-# Instala dependências
 COPY ./UI/package*.json ./
 RUN npm install
 
-# Copia o restante do frontend
 COPY ./UI .
-
-# Build Angular (correto!)
-RUN npm run build -- --configuration production
+RUN npm run build --configuration production
 
 
 # -------------------------
@@ -40,10 +36,10 @@ RUN npm run build -- --configuration production
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
-# Copia API publicada
+# Backend
 COPY --from=build /app/publish .
 
-# Copia frontend para wwwroot (corrigido!)
+# Frontend (Angular)
 COPY --from=frontend /app/dist/frotamaster ./wwwroot/
 
 EXPOSE 8080

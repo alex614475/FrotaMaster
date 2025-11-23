@@ -1,4 +1,4 @@
-using FrotaMaster.Infrastructure;
+﻿using FrotaMaster.Infrastructure;
 using FrotaMaster.Application;
 using Microsoft.OpenApi.Models;
 
@@ -19,10 +19,10 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Application (use cases / servi�os)
+// Application
 builder.Services.AddApplication();
 
-// Infrastructure (DbContext + Reposit�rios)
+// Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // CORS
@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngular",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+            policy.AllowAnyOrigin()
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -49,9 +49,17 @@ if (app.Environment.IsDevelopment())
 // CORS
 app.UseCors("AllowAngular");
 
+// 👉 Necessário para servir o FRONTEND Angular
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// Rotas da API
 app.MapControllers();
 
-// Test route
+// Test
 app.MapGet("/ping", () => "FrotaMaster API rodando!");
+
+// 👉 Fallback para SPA Angular (ESSENCIAL)
+app.MapFallbackToFile("index.html");
 
 app.Run();
