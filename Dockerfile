@@ -16,17 +16,23 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish ./FrotaMaster.API/FrotaMaster.API.csproj -c Release -o /app/publish
 
+
 # -------------------------
 # STAGE 2: Build FRONTEND
 # -------------------------
 FROM node:20 AS frontend
 WORKDIR /app
 
+# Instala dependências
 COPY ./UI/package*.json ./
 RUN npm install
 
+# Copia o restante do frontend
 COPY ./UI .
+
+# Build Angular (correto!)
 RUN npm run build -- --configuration production
+
 
 # -------------------------
 # STAGE 3: Runtime
@@ -34,8 +40,11 @@ RUN npm run build -- --configuration production
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
+# Copia API publicada
 COPY --from=build /app/publish .
-COPY --from=frontend /app/dist/frota-master ./wwwroot/
+
+# Copia frontend para wwwroot (corrigido!)
+COPY --from=frontend /app/dist/frotamaster ./wwwroot/
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
