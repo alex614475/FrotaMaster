@@ -1,59 +1,52 @@
 # ============================
-# STAGE 1 — BACKEND (.NET 8)
+# 1) BACKEND - .NET 8
 # ============================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
 WORKDIR /src
 
-COPY ./API/API.csproj ./API/
-COPY ./Application/Application.csproj ./Application/
-COPY ./Domain/Domain.csproj ./Domain/
-COPY ./Infrastructure/Infrastructure.csproj ./Infrastructure/
+# Copia apenas os .csproj para restaurar dependências
+COPY ./FrotaMaster.API/FrotaMaster.API.csproj ./FrotaMaster.API/
+COPY ./FrotaMaster.Application/FrotaMaster.Application.csproj ./FrotaMaster.Application/
+COPY ./FrotaMaster.Domain/FrotaMaster.Domain.csproj ./FrotaMaster.Domain/
+COPY ./FrotaMaster.Infrastructure/FrotaMaster.Infrastructure.csproj ./FrotaMaster.Infrastructure/
 
-RUN dotnet restore ./API/API.csproj
+# Restaurar dependências
+RUN dotnet restore ./FrotaMaster.API/FrotaMaster.API.csproj
 
+# Copiar todo o backend
 COPY . .
 
-RUN dotnet publish ./API/API.csproj -c Release -o /app/publish
+# Publicar
+RUN dotnet publish ./FrotaMaster.API/FrotaMaster.API.csproj -c Release -o /app/publish
 
 
 # ============================
-# STAGE 2 — FRONTEND (Angular)
+# 2) FRONTEND - Angular
 # ============================
-FROM node:20 AS frontend-build
+FROM node:18 AS frontend-build
 WORKDIR /app
 
-COPY ./UI/package*.json ./
+COPY ./UI/package.json ./UI/package-lock.json ./
 RUN npm install
 
 COPY ./UI .
 
-# Build CORRETO para seu projeto
-RUN npm run build -- --configuration=production --project=FrotaMaster
+RUN npm run build
 
 
 # ============================
-# STAGE 3 — NGINX FRONTEND
+# 3) RUNTIME - NGINX + API
 # ============================
-FROM nginx:stable AS frontend
-WORKDIR /usr/share/nginx/html
+FROM nginx:alpine AS final
 
-RUN rm -rf ./*
+# Copiar build do Angular
+COPY --from=frontend-build /app/dist/frotamaster/browser /usr/share/nginx/html
 
-# Caminho CORRETO baseado no seu angular.json
-COPY --from=frontend-build /app/dist/frotamaster/browser ./
+# Copiar API publicada
+COPY --from=backend-build /app/publish /app
 
+# Expor porta default NGINX
+EXPOSE 80
 
-# ============================
-# STAGE 4 — FINAL (.NET + NGINX)
-# ============================
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-WORKDIR /app
-
-COPY --from=backend-build /app/publish .
-
-COPY --from=frontend /usr/share/nginx/html /var/www/html
-
-EXPOSE 8080
-ENV ASPNETCORE_URLS=http://0.0.0.0:8080
-
-ENTRYPOINT ["dotnet", "API.dll"]
+# Iniciar NGINX
+CMD ["nginx", "-g", "daemon off;"]
