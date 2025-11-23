@@ -1,11 +1,46 @@
+Sistema de Gestão de Frota
 
-# Sistema de Gestão de Frota
+Este projeto é um Sistema de Gestão de Frota completo, desenvolvido como demonstração prática de boas práticas, arquitetura moderna e componentização avançada utilizando Angular 20, C#/.NET, PostgreSQL e Docker.
 
-Este projeto é um **sistema de gestão de frota**, desenvolvido como demonstração prática de boas práticas e arquitetura moderna em Angular 20, com backend em C#/.NET, PostgreSQL e Docker.
+O objetivo é apresentar uma solução organizada, escalável e modular, evidenciando domínio em:
 
-O objetivo é apresentar um projeto organizado, escalável e modular, evidenciando conhecimento em Angular moderno, componentização, organização por domínios e integração com serviços e mapas, além de backend estruturado com Entity Framework, DTOs e controllers.
+Arquitetura limpa no frontend e backend
 
----
+Componentes reutilizáveis (incluindo tabela genérica com filtros)
+
+Domínios bem definidos
+
+Integração com serviços, mapas e APIs
+
+Backend estruturado com Entity Framework, DTOs, Repositories e Controllers
+
+DeployD — Processo de Deploy Automatizado
+
+O projeto conta com um fluxo de deploy estruturado, garantindo build otimizado e entrega contínua:
+
+Etapas do Deploy
+
+Build do Frontend (Angular 20)
+Geração dos artefatos otimizados para produção.
+
+Publicação da API .NET em modo Release
+Compilação leve, rápida e preparada para execução em container.
+
+Orquestração com Docker Compose
+
+API .NET
+
+Banco PostgreSQL
+
+Criação das networks e volumes
+
+Versionamento garantido dos containers
+
+Deploy automatizado em ambiente de produção
+Aplicação publicada e disponível online através da infraestrutura do Railway:
+
+🔗 Acesso à aplicação:
+https://frotamaster-production.up.railway.app/dashboard
 
 ## Tecnologias Utilizadas
 
@@ -86,7 +121,8 @@ Essa estrutura permite escalabilidade, testabilidade e organização clara por d
 
 ### Lista de Motoristas
 - **Descrição:** Tela para visualizar todos os motoristas cadastrados, com opções de edição e remoção.
-<img width="1919" height="540" alt="Captura de tela 2025-11-20 232212" src="https://github.com/user-attachments/assets/3aa632fe-134c-4331-b731-90a12766a52f" />
+<img width="1886" height="876" alt="image" src="https://github.com/user-attachments/assets/eb2de0c2-56a6-4205-9dc4-c0eb991ded20" />
+
 
 
 ---
