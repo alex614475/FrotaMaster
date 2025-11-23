@@ -106,7 +106,8 @@ Essa estrutura permite escalabilidade, testabilidade e organização clara por d
 
 ### Dashboard
 - **Descrição:** Tela principal do sistema, mostrando estatísticas da frota, veículos em rotas e alertas.
-<img width="1890" height="857" alt="Captura de tela 2025-11-20 232055" src="https://github.com/user-attachments/assets/bb44b362-5176-4d32-a48e-705b9a4ef206" />
+<img width="1900" height="875" alt="image" src="https://github.com/user-attachments/assets/9114ccaa-7dc1-44dd-b132-b97df802db91" />
+
 
 
 ### Cadastro de Motorista
@@ -121,7 +122,7 @@ Essa estrutura permite escalabilidade, testabilidade e organização clara por d
 
 ### Lista de Veículos
 - **Descrição:** Interface responsável por listar todos os veículos registrados no sistema, com recursos de filtro por coluna, busca global e ações rápidas de edição.
-<img width="1886" height="876" alt="image" src="https://github.com/user-attachments/assets/eb2de0c2-56a6-4205-9dc4-c0eb991ded20" />
+<img width="1866" height="876" alt="image" src="https://github.com/user-attachments/assets/dc7933af-848b-41d9-8149-1ad3d7082bca" />
 
 
 
