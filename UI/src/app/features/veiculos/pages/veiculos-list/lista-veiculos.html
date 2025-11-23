@@ -1,134 +1,20 @@
-<div class="min-h-screen bg-gradient-to-br from-[#e8f0ff] to-[#eef3ff] p-6">
-  <!-- Topbar -->
-  <div class="flex justify-between items-center mb-6">
-    <div class="text-xl font-semibold text-gray-800">Veículos</div>
+<!-- lista-veiculos.component.html -->
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Lista de Veículos</h1>
 
-    <div class="flex items-center gap-4">
-      <button
-        (click)="onCadastrar()"
-        class="px-5 py-2 bg-[#4C72FF] text-white rounded-lg shadow hover:opacity-90"
-      >
-        CADASTRAR VEÍCULO
-      </button>
-
-      <div class="flex items-center gap-3 bg-white rounded-full px-3 py-1 shadow">
-        <img
-          src="/mnt/data/ba48597b-f82f-4a1c-94df-246e807295e2.png"
-          class="w-10 h-10 rounded-full object-cover"
-        />
-        <span class="font-medium text-gray-700">{{ usuarioNome }}</span>
-      </div>
-    </div>
+    <button
+      class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      (click)="onCadastrar()"
+    >
+      Novo Veículo
+    </button>
   </div>
 
-  <!-- Filters (se quiser ativar futuramente) -->
-  <div class="bg-white p-6 rounded-2xl shadow-md mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div>
-        <label class="block text-gray-600 mb-1 text-sm">Pesquisar</label>
-        <input
-          class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:outline-none"
-          placeholder="Placa, modelo, marca..."
-        />
-      </div>
-
-      <div>
-        <label class="block text-gray-600 mb-1 text-sm">Marca</label>
-        <select class="w-full px-4 py-2 border bg-gray-50 rounded-xl text-gray-600">
-          <option>Todas</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-gray-600 mb-1 text-sm">Status</label>
-        <select class="w-full px-4 py-2 border bg-gray-50 rounded-xl text-gray-600">
-          <option>Todos</option>
-        </select>
-      </div>
-
-      <div class="flex items-end">
-        <button class="w-full bg-[#4C72FF] text-white px-6 py-2 rounded-xl shadow hover:opacity-90">
-          FILTRAR
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Table Card -->
-  <div class="bg-white p-6 rounded-2xl shadow-md">
-    <div class="flex justify-between items-center mb-4">
-      <div class="font-semibold text-gray-800">Lista de Veículos</div>
-    </div>
-
-    <!-- TABELA -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-left">
-        <thead class="text-gray-500 text-sm">
-          <tr>
-            <th class="p-3">Placa</th>
-            <th class="p-3">Modelo</th>
-            <th class="p-3">Marca</th>
-            <th class="p-3">Ano</th>
-            <th class="p-3">KM</th>
-            <th class="p-3">Status</th>
-            <th class="p-3">Ações</th>
-          </tr>
-        </thead>
-
-        <tbody class="text-gray-700">
-          <tr class="border-t hover:bg-gray-50 transition" *ngFor="let v of veiculos$ | async">
-            <td class="p-3 font-medium">{{ v.placa }}</td>
-            <td class="p-3">{{ v.modelo }}</td>
-            <td class="p-3">{{ v.marca }}</td>
-            <td class="p-3">{{ v.ano }}</td>
-            <td class="p-3">{{ v.quilometragem | number }}</td>
-
-            <!-- BADGE DE STATUS -->
-            <td class="p-3">
-              <span
-                class="px-3 py-1 text-sm font-semibold rounded-full"
-                [ngClass]="{
-                  'bg-green-200 text-green-900': v.status === 'Disponivel',
-                  'bg-yellow-200 text-yellow-900': v.status === 'EmManutencao',
-                  'bg-red-200 text-red-900': v.status === 'Inativo'
-                }"
-              >
-                {{
-                  v.status === 'Disponivel'
-                    ? 'Disponível'
-                    : v.status === 'EmManutencao'
-                    ? 'Em Manutenção'
-                    : 'Inativo'
-                }}
-              </span>
-            </td>
-
-            <!-- AÇÕES -->
-            <td class="p-3 flex gap-2">
-              <button
-                (click)="onEditar(v.id!)"
-                class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-              >
-                Editar
-              </button>
-
-              <button
-                (click)="onExcluir(v.id!)"
-                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-              >
-                Excluir
-              </button>
-
-              <button
-                (click)="onDetalhes(v.id!)"
-                class="bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200"
-              >
-                Detalhes
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <!-- Use o mesmo seletor definido no componente -->
+  <app-generic-table
+    [data]="veiculos$ | async"
+    [columns]="columns"
+    [actions]="actions"
+  ></app-generic-table>
 </div>
