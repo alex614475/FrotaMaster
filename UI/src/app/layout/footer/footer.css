@@ -1,0 +1,20 @@
+.truck-run {
+  position: absolute;
+  top: 50%;
+  left: -180px;
+  transform: translateY(-50%);
+  height: 30px;
+  width: auto;
+  opacity: 1;
+  pointer-events: none;
+  animation: truckMove 20s linear infinite;
+}
+
+@keyframes truckMove {
+  0% {
+    transform: translate(-180px, -50%);
+  }
+  100% {
+    transform: translate(110vw, -50%);
+  }
+}
