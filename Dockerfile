@@ -26,7 +26,7 @@ COPY ./UI/package*.json ./
 RUN npm install
 
 COPY ./UI .
-RUN npm run build -- --configuration production
+RUN npm run build --configuration production
 
 # -------------------------
 # STAGE 3: Runtime
