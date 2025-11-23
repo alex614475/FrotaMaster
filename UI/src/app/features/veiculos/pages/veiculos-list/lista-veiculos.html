@@ -1,4 +1,4 @@
-<!-- lista-veiculos.component.html -->
+<!-- lista-veiculos.html -->
 <app-generic-table
   [config]="tableConfig"
   [data]="veiculos$ | async"
@@ -7,4 +7,5 @@
   (addNew)="onCadastrar()"
   (batchAction)="onAcaoEmLote()"
   (rowClick)="onDetalhes($event.id)"
+  (filtersChange)="onFiltersChange($event)"
 ></app-generic-table>

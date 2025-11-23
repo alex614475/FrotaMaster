@@ -1,3 +1,5 @@
+import { Status } from './status.model';
+
 export interface Veiculo {
   id: number;
   placa: string;
@@ -5,7 +7,7 @@ export interface Veiculo {
   marca: string;
   ano: number;
   quilometragem: number;
-  status: string;
+  status: Status;
   manutencoes: any[];
   rotas: any[];
 }

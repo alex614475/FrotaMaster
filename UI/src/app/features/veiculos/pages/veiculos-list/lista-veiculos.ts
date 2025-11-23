@@ -12,6 +12,7 @@ import {
   TableColumn,
   TableAction,
   TableConfig,
+  TableFilter,
 } from '../../../../shared/components/generic-table/generic-table';
 
 @Component({
@@ -24,10 +25,50 @@ export class ListaVeiculosComponent implements OnInit {
   veiculos$!: Observable<Veiculo[]>;
 
   tableConfig: TableConfig = {
-    title: 'Lista de Veiculos',
+    title: 'Lista de Veículos',
     addButton: {
       label: 'Adicionar Veículo',
     },
+    filters: [
+      {
+        field: 'placa',
+        label: 'Placa',
+        type: 'text',
+        placeholder: 'Digite a placa...',
+      },
+      {
+        field: 'modelo',
+        label: 'Modelo',
+        type: 'text',
+        placeholder: 'Digite o modelo...',
+      },
+      {
+        field: 'marca',
+        label: 'Marca',
+        type: 'select',
+        options: [
+          { value: '', label: 'Todas' },
+          { value: 'Toyota', label: 'Toyota' },
+          { value: 'Honda', label: 'Honda' },
+          { value: 'Ford', label: 'Ford' },
+          { value: 'Chevrolet', label: 'Chevrolet' },
+          { value: 'Volkswagen', label: 'Volkswagen' },
+          { value: 'Fiat', label: 'Fiat' },
+          { value: 'Hyundai', label: 'Hyundai' },
+        ],
+      },
+      {
+        field: 'status',
+        label: 'Status',
+        type: 'select',
+        options: [
+          { value: '', label: 'Todos' },
+          { value: 'Ativo', label: 'Ativo' },
+          { value: 'Manutenção', label: 'Manutenção' },
+          { value: 'Inativo', label: 'Inativo' },
+        ],
+      },
+    ],
     showFilters: true,
     showBatchActions: true,
     showPagination: true,
@@ -43,6 +84,7 @@ export class ListaVeiculosComponent implements OnInit {
       header: 'KM',
       format: (v) => (v ? v.toLocaleString('pt-BR') : '0'),
     },
+    { field: 'status', header: 'Status' }, // Apenas o nome, sem formatação
   ];
 
   actions: TableAction[] = [
@@ -50,6 +92,11 @@ export class ListaVeiculosComponent implements OnInit {
       label: 'Editar',
       class: 'bg-blue-600 hover:bg-blue-700',
       onClick: (row) => this.onEditar(row.id),
+    },
+    {
+      label: 'Detalhes',
+      class: 'bg-green-600 hover:bg-green-700',
+      onClick: (row) => this.onDetalhes(row.id),
     },
   ];
 
@@ -82,5 +129,10 @@ export class ListaVeiculosComponent implements OnInit {
 
   onAcaoEmLote() {
     console.log('Ação em lote disparada');
+  }
+
+  // Nova função para lidar com mudanças nos filtros
+  onFiltersChange(filters: any) {
+    console.log('Filtros aplicados:', filters);
   }
 }

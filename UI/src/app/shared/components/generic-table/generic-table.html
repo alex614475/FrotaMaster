@@ -1,5 +1,5 @@
 <!-- generic-table.html -->
-<div class="mr-3 ml-3 min-h-screen bg-gradient-to-br from-[#e8f0ff] to-[#eef3ff] p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#e8f0ff] to-[#eef3ff] p-6">
   <!-- Topbar -->
   <div class="flex justify-between items-center mb-6">
     <div class="text-xl font-semibold text-gray-800">{{ config.title }}</div>
@@ -7,7 +7,7 @@
     <div class="flex items-center gap-4">
       <button
         *ngIf="config.addButton"
-        class="px-5 py-2 bg-blue-700 text-white rounded-lg shadow hover:opacity-90"
+        class="px-5 py-2 bg-[#4C72FF] text-white rounded-lg shadow hover:opacity-90"
         (click)="onAddNew()"
       >
         {{ config.addButton.label }}
@@ -16,37 +16,80 @@
   </div>
 
   <!-- Filters Card -->
-  <div *ngIf="config.showFilters" class="bg-white p-6 rounded-2xl shadow-md mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <!-- Search -->
-      <div>
-        <label class="block text-gray-600 mb-1 text-sm">Buscar</label>
-        <input
-          class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:outline-none"
-          placeholder="Pesquisar..."
-        />
+  <div *ngIf="config.showFilters && config.filters" class="bg-white p-6 rounded-2xl shadow-md mb-6">
+    <div class="flex flex-col md:flex-row gap-4 items-end">
+      <!-- Filtros Dinâmicos - Lado Esquerdo -->
+      <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div *ngFor="let filter of config.filters">
+          <label class="block text-gray-600 mb-1 text-sm">{{ filter.label }}</label>
+
+          <!-- Input Text -->
+          <input
+            *ngIf="filter.type === 'text'"
+            type="text"
+            [(ngModel)]="filterValues[filter.field]"
+            (keyup.enter)="onFilter()"
+            [placeholder]="filter.placeholder || 'Pesquisar...'"
+            class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 focus:outline-none focus:border-[#4C72FF] h-[42px]"
+          />
+
+          <!-- Select -->
+          <select
+            *ngIf="filter.type === 'select'"
+            [(ngModel)]="filterValues[filter.field]"
+            class="w-full px-4 py-2.5 border bg-gray-50 rounded-xl text-gray-600 focus:outline-none focus:border-[#4C72FF] h-[42px]"
+          >
+            <option value="">Todos</option>
+            <option *ngFor="let option of filter.options" [value]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+
+          <!-- Number -->
+          <input
+            *ngIf="filter.type === 'number'"
+            type="number"
+            [(ngModel)]="filterValues[filter.field]"
+            (keyup.enter)="onFilter()"
+            [placeholder]="filter.placeholder || 'Número...'"
+            class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 focus:outline-none focus:border-[#4C72FF] h-[42px]"
+          />
+        </div>
       </div>
 
-      <!-- Filtro 1 -->
-      <div>
-        <label class="block text-gray-600 mb-1 text-sm">Filtro 1</label>
-        <select class="w-full px-4 py-2 border bg-gray-50 rounded-xl text-gray-600">
-          <option>Todos</option>
-        </select>
-      </div>
-
-      <!-- Filtro 2 -->
-      <div>
-        <label class="block text-gray-600 mb-1 text-sm">Filtro 2</label>
-        <select class="w-full px-4 py-2 border bg-gray-50 rounded-xl text-gray-600">
-          <option>Todos</option>
-        </select>
-      </div>
-
-      <!-- Search Button -->
-      <div class="flex items-end">
-        <button class="w-full bg-blue-700 text-white px-6 py-2 rounded-xl shadow hover:opacity-90">
+      <!-- Botões - Lado Direito Fixo -->
+      <div class="flex gap-2 items-end">
+        <!-- Botão Pesquisar com Ícone de Busca -->
+        <button
+          class="flex items-center gap-2 bg-[#4C72FF] text-white px-4 py-2.5 rounded-xl shadow hover:opacity-90 text-sm min-w-[120px] justify-center h-[42px]"
+          (click)="onFilter()"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
+          </svg>
           PESQUISAR
+        </button>
+
+        <!-- Botão Limpar com Ícone de Filtro -->
+        <button
+          *ngIf="hasActiveFilters"
+          class="flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 text-sm min-w-[100px] justify-center h-[42px]"
+          (click)="onClearFilters()"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+            ></path>
+          </svg>
+          Limpar
         </button>
       </div>
     </div>
@@ -56,7 +99,12 @@
   <div class="bg-white p-6 rounded-2xl shadow-md">
     <!-- Top of Table -->
     <div class="flex justify-between items-center mb-4">
-      <div class="font-semibold text-gray-800">{{ config.title }}</div>
+      <div class="font-semibold text-gray-800">
+        {{ config.title }}
+        <span *ngIf="hasActiveFilters" class="text-sm text-gray-500 ml-2">
+          ({{ displayData.length }} resultado{{ displayData.length !== 1 ? 's' : '' }})
+        </span>
+      </div>
 
       <div *ngIf="config.showBatchActions" class="flex items-center gap-3">
         <select class="px-4 py-2 border bg-gray-50 rounded-xl text-gray-600">
@@ -64,7 +112,7 @@
         </select>
 
         <button
-          class="px-5 py-2 bg-blue-700 text-white rounded-xl hover:opacity-90"
+          class="px-5 py-2 bg-[#4C72FF] text-white rounded-xl hover:opacity-90"
           (click)="onBatchAction()"
         >
           AÇÃO EM LOTE
@@ -90,9 +138,9 @@
         </thead>
 
         <tbody class="text-gray-700">
-          <ng-container *ngIf="data && data.length > 0; else noData">
+          <ng-container *ngIf="displayData.length > 0; else noData">
             <tr
-              *ngFor="let row of data"
+              *ngFor="let row of displayData"
               class="border-t hover:bg-gray-50 transition cursor-pointer"
               (click)="onRowClick(row)"
             >
@@ -139,7 +187,7 @@
     <!-- Pagination -->
     <div *ngIf="config.showPagination" class="flex justify-end items-center gap-2 mt-4">
       <button class="px-3 py-1 border rounded-lg text-gray-600">1</button>
-      <button class="px-3 py-1 bg-blue-700 text-white rounded-lg">2</button>
+      <button class="px-3 py-1 bg-[#4C72FF] text-white rounded-lg">2</button>
       <button class="px-3 py-1 border rounded-lg text-gray-600">3</button>
       <span class="text-gray-500">...</span>
       <button class="px-3 py-1 border rounded-lg text-gray-600">10</button>
