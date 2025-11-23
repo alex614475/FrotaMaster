@@ -119,8 +119,8 @@ Essa estrutura permite escalabilidade, testabilidade e organização clara por d
 <img width="724" height="804" alt="Captura de tela 2025-11-20 232252" src="https://github.com/user-attachments/assets/7d5b3840-ad80-4f7c-abe8-c21d1dd507b5" />
 
 
-### Lista de Motoristas
-- **Descrição:** Tela para visualizar todos os motoristas cadastrados, com opções de edição e remoção.
+### Lista de Veículos
+- **Descrição:** Interface responsável por listar todos os veículos registrados no sistema, com recursos de filtro por coluna, busca global e ações rápidas de edição.
 <img width="1886" height="876" alt="image" src="https://github.com/user-attachments/assets/eb2de0c2-56a6-4205-9dc4-c0eb991ded20" />
 
 
