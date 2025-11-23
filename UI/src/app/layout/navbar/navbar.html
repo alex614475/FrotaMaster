@@ -1,7 +1,11 @@
-<nav class="bg-blue-900 text-white shadow-lg sticky top-0 z-50">
-  <div class="container mx-auto flex justify-between items-center p-4">
-    <!-- Logo / Título -->
-    <div class="text-2xl font-bold">FrotaMaster</div>
+<nav class="bg-gray-700 text-white shadow-lg sticky top-0 z-50 relative overflow-hidden">
+  <!-- Caminhão animado no fundo da navbar -->
+
+  <div class="container mx-auto flex justify-between items-center p-4 relative z-20">
+    <!-- Logo Fixa -->
+    <div class="flex items-center">
+      <img src="assets/imagens/Logo_branca.png" class="h-10 w-auto object-contain" />
+    </div>
 
     <!-- Menu Desktop -->
     <div class="hidden md:flex ml-10 flex items-baseline space-x-4">
@@ -37,7 +41,6 @@
         Manutencão
       </a>
 
-      <!-- NOVO LINK Distribuição -->
       <a
         routerLink="/distribuicao"
         routerLinkActive="bg-blue-800 text-white"
@@ -47,12 +50,10 @@
       </a>
     </div>
 
-    <!-- Perfil do usuário -->
-    <div class="flex items-center space-x-2 relative">
+    <!-- Perfil -->
+    <div class="hidden md:flex items-center space-x-2 relative">
       <span>Alex Souza</span>
-      <!-- <img class="h-8 w-8 rounded-full" src="/imagens/foto_perfil.jpeg" alt="User" /> -->
 
-      <!-- Dropdown do usuário -->
       <div
         *ngIf="openProfile"
         class="absolute right-0 mt-10 w-48 rounded-md bg-blue-800 py-2 shadow-lg ring-1 ring-black/5"
@@ -70,7 +71,14 @@
   </div>
 
   <!-- Menu Mobile -->
-  <div *ngIf="openMobile" class="md:hidden px-2 pt-2 pb-3 space-y-1 bg-blue-800 shadow-lg">
+  <div
+    *ngIf="openMobile"
+    class="md:hidden px-2 pt-2 pb-3 space-y-1 bg-blue-800 shadow-lg z-30 relative"
+  >
+    <div class="w-full flex justify-center mb-2">
+      <img src="assets/imagens/Logo_branca.png" class="h-12 w-auto object-contain" />
+    </div>
+
     <a
       routerLink="/dashboard"
       routerLinkActive="bg-blue-700 text-white"
@@ -78,6 +86,7 @@
     >
       Dashboard
     </a>
+
     <a
       routerLink="/veiculos"
       routerLinkActive="bg-blue-700 text-white"
@@ -85,6 +94,7 @@
     >
       Veículos
     </a>
+
     <a
       routerLink="/motoristas"
       routerLinkActive="bg-blue-700 text-white"
@@ -93,7 +103,6 @@
       Motorista
     </a>
 
-    <!-- NOVO LINK Distribuição -->
     <a
       routerLink="/distribuicao-da-frota/list"
       routerLinkActive="bg-blue-700 text-white"

@@ -5,3 +5,35 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+/* Caminhão passando atrás dos botões */
+.truck-bg-run {
+  position: absolute;
+  top: 8px;
+  left: -220px;
+
+  height: 40px;
+  opacity: 0.25;
+
+  z-index: 5; /* atrás dos botões */
+  pointer-events: none;
+
+  animation: truckMove 18s linear infinite;
+}
+
+/* itens ficam na frente */
+nav a,
+nav span,
+nav .container {
+  position: relative;
+  z-index: 20;
+}
+
+/* animação */
+@keyframes truckMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(140vw);
+  }
+}

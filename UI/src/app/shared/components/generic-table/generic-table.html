@@ -1,5 +1,5 @@
 <!-- generic-table.html -->
-<div class="min-h-screen bg-gradient-to-br from-[#e8f0ff] to-[#eef3ff] p-6">
+<div class="min-h-screen bg-gray-100 p-6">
   <!-- Topbar -->
   <div class="flex justify-between items-center mb-6">
     <div class="text-xl font-semibold text-gray-800">{{ config.title }}</div>
@@ -7,7 +7,7 @@
     <div class="flex items-center gap-4">
       <button
         *ngIf="config.addButton"
-        class="px-5 py-2 bg-[#4C72FF] text-white rounded-lg shadow hover:opacity-90"
+        class="px-5 py-2 rounded-lg hover:bg-blue-700 mr-5 bg-blue-900 text-white shadow-lg sticky top-0 z-50"
         (click)="onAddNew()"
       >
         {{ config.addButton.label }}
@@ -61,7 +61,7 @@
       <div class="flex gap-2 items-end">
         <!-- Botão Pesquisar com Ícone de Busca -->
         <button
-          class="flex items-center gap-2 bg-[#4C72FF] text-white px-4 py-2.5 rounded-xl shadow hover:opacity-90 text-sm min-w-[120px] justify-center h-[42px]"
+          class="flex items-center px-5 py-2 gap-2 bg-gray-500 text-white rounded-lg shadow hover:bg-blue-700 justify-between"
           (click)="onFilter()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
