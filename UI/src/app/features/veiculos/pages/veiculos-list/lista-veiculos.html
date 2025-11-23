@@ -1,6 +1,7 @@
 <!-- lista-veiculos.html -->
 <app-generic-table
   [config]="tableConfig"
+  [paginationConfig]="paginationConfig"
   [data]="veiculos$ | async"
   [columns]="columns"
   [actions]="actions"
@@ -8,4 +9,5 @@
   (batchAction)="onAcaoEmLote()"
   (rowClick)="onDetalhes($event.id)"
   (filtersChange)="onFiltersChange($event)"
+  (pageChange)="onPageChange($event)"
 ></app-generic-table>

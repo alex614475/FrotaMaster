@@ -37,6 +37,18 @@ export interface TableConfig {
   showPagination?: boolean;
 }
 
+export interface PaginationConfig {
+  currentPage: number;
+  itemsPerPage: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface PaginationEvent {
+  page: number;
+  itemsPerPage: number;
+}
+
 @Component({
   selector: 'app-generic-table',
   standalone: true,
@@ -51,6 +63,13 @@ export class GenericTableComponent implements OnInit {
     showPagination: true,
   };
 
+  @Input() paginationConfig: PaginationConfig = {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 0,
+    totalPages: 0,
+  };
+
   @Input() columns: TableColumn[] = [];
   @Input() data: any[] | null = [];
   @Input() actions: TableAction[] = [];
@@ -60,6 +79,7 @@ export class GenericTableComponent implements OnInit {
   @Output() addNew = new EventEmitter<void>();
   @Output() batchAction = new EventEmitter<void>();
   @Output() filtersChange = new EventEmitter<any>();
+  @Output() pageChange = new EventEmitter<PaginationEvent>();
 
   // Objeto para armazenar os valores dos filtros
   filterValues: any = {};
@@ -149,5 +169,63 @@ export class GenericTableComponent implements OnInit {
     return this.config.filters.some(
       (filter) => this.filterValues[filter.field] && this.filterValues[filter.field] !== ''
     );
+  }
+
+  // ========== MÉTODOS DE PAGINAÇÃO ==========
+
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.paginationConfig.totalPages) {
+      this.paginationConfig.currentPage = page;
+      this.pageChange.emit({
+        page: page,
+        itemsPerPage: this.paginationConfig.itemsPerPage,
+      });
+    }
+  }
+
+  onItemsPerPageChange(event: any): void {
+    const itemsPerPage = parseInt(event.target.value);
+    this.paginationConfig.itemsPerPage = itemsPerPage;
+    this.paginationConfig.currentPage = 1; // Reset para primeira página
+    this.pageChange.emit({
+      page: 1,
+      itemsPerPage: itemsPerPage,
+    });
+  }
+
+  // Gerar array de páginas para exibição
+  get pages(): number[] {
+    const total = this.paginationConfig.totalPages;
+    const current = this.paginationConfig.currentPage;
+    const delta = 2; // Quantidade de páginas para mostrar ao lado da atual
+    const range = [];
+    const rangeWithDots = [];
+
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+        range.push(i);
+      }
+    }
+
+    let prev = 0;
+    for (const i of range) {
+      if (prev !== 0 && i - prev !== 1) {
+        rangeWithDots.push(-1); // -1 representa "..."
+      }
+      rangeWithDots.push(i);
+      prev = i;
+    }
+
+    return rangeWithDots;
+  }
+
+  // Informações de exibição
+  get startItem(): number {
+    return (this.paginationConfig.currentPage - 1) * this.paginationConfig.itemsPerPage + 1;
+  }
+
+  get endItem(): number {
+    const end = this.paginationConfig.currentPage * this.paginationConfig.itemsPerPage;
+    return end > this.paginationConfig.totalItems ? this.paginationConfig.totalItems : end;
   }
 }

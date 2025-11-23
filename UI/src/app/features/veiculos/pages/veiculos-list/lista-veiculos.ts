@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 import { Veiculo } from '../../../../models/veiculo.model';
 import { VeiculoService } from '../../services/veiculo.service';
@@ -12,7 +12,8 @@ import {
   TableColumn,
   TableAction,
   TableConfig,
-  TableFilter,
+  PaginationConfig,
+  PaginationEvent,
 } from '../../../../shared/components/generic-table/generic-table';
 
 @Component({
@@ -23,6 +24,14 @@ import {
 })
 export class ListaVeiculosComponent implements OnInit {
   veiculos$!: Observable<Veiculo[]>;
+
+  // Configuração de paginação
+  paginationConfig: PaginationConfig = {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 0,
+    totalPages: 0,
+  };
 
   tableConfig: TableConfig = {
     title: 'Lista de Veículos',
@@ -84,7 +93,7 @@ export class ListaVeiculosComponent implements OnInit {
       header: 'KM',
       format: (v) => (v ? v.toLocaleString('pt-BR') : '0'),
     },
-    { field: 'status', header: 'Status' }, // Apenas o nome, sem formatação
+    { field: 'status', header: 'Status' },
   ];
 
   actions: TableAction[] = [
@@ -107,7 +116,28 @@ export class ListaVeiculosComponent implements OnInit {
   }
 
   carregarVeiculos() {
+    // Se sua API suporta paginação, use:
+    // this.veiculos$ = this.veiculoService.listarVeiculos(
+    //   this.paginationConfig.currentPage,
+    //   this.paginationConfig.itemsPerPage
+    // ).pipe(...)
+
+    // Por enquanto, vamos simular a paginação no cliente
     this.veiculos$ = this.veiculoService.listarVeiculos().pipe(
+      tap((veiculos) => {
+        // Simulação: calcular totais baseado em todos os dados
+        this.paginationConfig.totalItems = veiculos.length;
+        this.paginationConfig.totalPages = Math.ceil(
+          veiculos.length / this.paginationConfig.itemsPerPage
+        );
+      }),
+      map((veiculos) => {
+        // Paginação no cliente (remova isso quando a API fizer paginação)
+        const startIndex =
+          (this.paginationConfig.currentPage - 1) * this.paginationConfig.itemsPerPage;
+        const endIndex = startIndex + this.paginationConfig.itemsPerPage;
+        return veiculos.slice(startIndex, endIndex);
+      }),
       catchError((error) => {
         console.error('Erro ao carregar veículos:', error);
         return of([]);
@@ -131,8 +161,16 @@ export class ListaVeiculosComponent implements OnInit {
     console.log('Ação em lote disparada');
   }
 
-  // Nova função para lidar com mudanças nos filtros
   onFiltersChange(filters: any) {
     console.log('Filtros aplicados:', filters);
+    // Aqui você pode implementar filtros no servidor quando necessário
+    this.carregarVeiculos(); // Recarrega com os filtros
+  }
+
+  // Nova função para lidar com mudanças de página
+  onPageChange(event: PaginationEvent) {
+    this.paginationConfig.currentPage = event.page;
+    this.paginationConfig.itemsPerPage = event.itemsPerPage;
+    this.carregarVeiculos();
   }
 }

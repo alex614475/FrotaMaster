@@ -100,23 +100,9 @@
     <!-- Top of Table -->
     <div class="flex justify-between items-center mb-4">
       <div class="font-semibold text-gray-800">
-        {{ config.title }}
         <span *ngIf="hasActiveFilters" class="text-sm text-gray-500 ml-2">
           ({{ displayData.length }} resultado{{ displayData.length !== 1 ? 's' : '' }})
         </span>
-      </div>
-
-      <div *ngIf="config.showBatchActions" class="flex items-center gap-3">
-        <select class="px-4 py-2 border bg-gray-50 rounded-xl text-gray-600">
-          <option>Todos os campos</option>
-        </select>
-
-        <button
-          class="px-5 py-2 bg-[#4C72FF] text-white rounded-xl hover:opacity-90"
-          (click)="onBatchAction()"
-        >
-          AÇÃO EM LOTE
-        </button>
       </div>
     </div>
 
@@ -184,13 +170,80 @@
       </table>
     </div>
 
-    <!-- Pagination -->
-    <div *ngIf="config.showPagination" class="flex justify-end items-center gap-2 mt-4">
-      <button class="px-3 py-1 border rounded-lg text-gray-600">1</button>
-      <button class="px-3 py-1 bg-[#4C72FF] text-white rounded-lg">2</button>
-      <button class="px-3 py-1 border rounded-lg text-gray-600">3</button>
-      <span class="text-gray-500">...</span>
-      <button class="px-3 py-1 border rounded-lg text-gray-600">10</button>
+    <!-- Paginação -->
+    <div
+      *ngIf="config.showPagination && paginationConfig.totalItems > 0"
+      class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-gray-200"
+    >
+      <!-- Informações de exibição -->
+      <div class="text-sm text-gray-600">
+        Mostrando {{ startItem }} a {{ endItem }} de
+        {{ paginationConfig.totalItems | number }} registros
+      </div>
+
+      <!-- Controles de paginação -->
+      <div class="flex items-center gap-4">
+        <!-- Itens por página -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Itens por página:</span>
+          <select
+            (change)="onItemsPerPageChange($event)"
+            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-[#4C72FF]"
+          >
+            <option value="5" [selected]="paginationConfig.itemsPerPage === 5">5</option>
+            <option value="10" [selected]="paginationConfig.itemsPerPage === 10">10</option>
+            <option value="25" [selected]="paginationConfig.itemsPerPage === 25">25</option>
+            <option value="50" [selected]="paginationConfig.itemsPerPage === 50">50</option>
+          </select>
+        </div>
+
+        <!-- Navegação de páginas -->
+        <div class="flex items-center gap-1">
+          <!-- Botão Anterior -->
+          <button
+            (click)="onPageChange(paginationConfig.currentPage - 1)"
+            [disabled]="paginationConfig.currentPage === 1"
+            class="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+            title="Página anterior"
+          >
+            ‹
+          </button>
+
+          <!-- Números das páginas -->
+          <ng-container *ngFor="let page of pages">
+            <button
+              *ngIf="page !== -1"
+              (click)="onPageChange(page)"
+              [class.bg-[#4C72FF]!]="page === paginationConfig.currentPage"
+              [class.text-white!]="page === paginationConfig.currentPage"
+              [class.border-[#4C72FF]!]="page === paginationConfig.currentPage"
+              class="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 text-sm min-w-[40px] transition-colors"
+            >
+              {{ page }}
+            </button>
+
+            <span *ngIf="page === -1" class="px-2 text-gray-500 text-sm">...</span>
+          </ng-container>
+
+          <!-- Botão Próximo -->
+          <button
+            (click)="onPageChange(paginationConfig.currentPage + 1)"
+            [disabled]="paginationConfig.currentPage === paginationConfig.totalPages"
+            class="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+            title="Próxima página"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensagem quando não há dados -->
+    <div
+      *ngIf="(!data || data.length === 0) && config.showPagination"
+      class="text-center py-8 text-gray-500"
+    >
+      Nenhum registro encontrado
     </div>
   </div>
 </div>
