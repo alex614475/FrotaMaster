@@ -14,16 +14,29 @@ import { Router } from '@angular/router';
 export class ListaVeiculosComponent {
   veiculos$: Observable<Veiculo[]>;
 
+  usuarioNome = 'User Name'; // opcional — pode puxar do auth futuramente
+
   constructor(private veiculoService: VeiculoService, private router: Router) {
     this.veiculos$ = this.veiculoService.listarVeiculos();
   }
 
   onCadastrar() {
     this.router.navigate(['/veiculos/cadastro']);
-    console.log('Cadastrar Veículo clicado');
   }
 
   onEditar(id: number) {
-    this.router.navigate(['/veiculos/editar/', id]);
+    this.router.navigate(['/veiculos/editar', id]);
+  }
+
+  onExcluir(id: number) {
+    if (confirm('Deseja excluir este veículo?')) {
+      this.veiculoService.deletarVeiculo(id).subscribe(() => {
+        this.veiculos$ = this.veiculoService.listarVeiculos();
+      });
+    }
+  }
+
+  onDetalhes(id: number) {
+    this.router.navigate(['/veiculos/detalhes', id]);
   }
 }
