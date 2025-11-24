@@ -109,7 +109,11 @@ export class GenericTableComponent implements OnInit {
   onBatchAction() {
     this.batchAction.emit();
   }
+  showFilter = false;
 
+  toggleFilter() {
+    this.showFilter = !this.showFilter;
+  }
   // Aplica os filtros
   onFilter() {
     if (!this.data) return;
