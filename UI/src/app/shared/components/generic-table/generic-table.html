@@ -1,47 +1,109 @@
-<!-- generic-table.html -->
-<div class="min-h-screen bg-gray-100 p-6">
-  <!-- Topbar -->
-  <div class="flex justify-between items-center mb-6">
-    <div class="text-xl font-semibold text-gray-800">{{ config.title }}</div>
+<div class="min-h-screen p-4 md:p-6">
+  <!-- Header: Título + Botão Novo -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold">{{ config.title }}</h2>
 
-    <div class="flex items-center gap-4">
-      <button
-        *ngIf="config.addButton"
-        class="px-5 py-2 rounded-lg hover:bg-blue-700 mr-5 bg-blue-900 text-white shadow-lg sticky top-0 z-50"
-        (click)="onAddNew()"
-      >
-        {{ config.addButton.label }}
-      </button>
+    <!-- Botão Novo -->
+    <button
+      *ngIf="config.addButton"
+      (click)="onAddNew()"
+      class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 flex items-center gap-2"
+    >
+      <span *ngIf="config.addButton.icon" [innerHTML]="config.addButton.icon"></span>
+      {{ config.addButton.label }}
+    </button>
+  </div>
+
+  <!-- Filters Card (DESKTOP) -->
+  <div *ngIf="config.showFilters && config.filters" class="hidden md:block">
+    <div class="bg-white p-6 rounded-2xl shadow-md mb-6">
+      <div class="flex flex-col md:flex-row gap-4 items-end">
+        <!-- Filtros Lado Esquerdo -->
+        <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div *ngFor="let filter of config.filters">
+            <label class="block text-gray-600 mb-1 text-sm">{{ filter.label }}</label>
+
+            <!-- Input Text -->
+            <input
+              *ngIf="filter.type === 'text'"
+              type="text"
+              [(ngModel)]="filterValues[filter.field]"
+              (keyup.enter)="onFilter()"
+              [placeholder]="filter.placeholder || 'Pesquisar...'"
+              class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 focus:outline-none focus:border-blue-600 h-[42px]"
+            />
+
+            <!-- Select -->
+            <select
+              *ngIf="filter.type === 'select'"
+              [(ngModel)]="filterValues[filter.field]"
+              class="w-full px-4 py-2.5 border bg-gray-50 rounded-xl text-gray-600 focus:outline-none focus:border-blue-600 h-[42px]"
+            >
+              <option value="">Todos</option>
+              <option *ngFor="let opt of filter.options" [value]="opt.value">
+                {{ opt.label }}
+              </option>
+            </select>
+
+            <!-- Number -->
+            <input
+              *ngIf="filter.type === 'number'"
+              type="number"
+              [(ngModel)]="filterValues[filter.field]"
+              (keyup.enter)="onFilter()"
+              class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 focus:outline-none focus:border-blue-600 h-[42px]"
+            />
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex gap-2 items-end">
+          <button
+            class="flex items-center px-5 py-2 gap-2 bg-gray-500 text-white rounded-lg shadow hover:bg-blue-700"
+            (click)="onFilter()"
+          >
+            🔍 PESQUISAR
+          </button>
+
+          <button
+            *ngIf="hasActiveFilters"
+            class="flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 text-sm min-w-[100px] justify-center h-[42px]"
+            (click)="onClearFilters()"
+          >
+            🧹 Limpar
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Filters Card -->
-  <div *ngIf="config.showFilters && config.filters" class="bg-white p-6 rounded-2xl shadow-md mb-6">
-    <div class="flex flex-col md:flex-row gap-4 items-end">
-      <!-- Filtros Dinâmicos - Lado Esquerdo -->
-      <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
+  <!-- FILTROS MOBILE (overlay lateral) -->
+  <div *ngIf="showFilter" class="fixed inset-0 bg-black/40 md:hidden z-50 flex justify-end">
+    <div class="bg-white w-3/4 h-full p-5 shadow-xl animate-slide-left overflow-y-auto">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Filtros</h2>
+
+      <div class="grid grid-cols-1 gap-4">
         <div *ngFor="let filter of config.filters">
           <label class="block text-gray-600 mb-1 text-sm">{{ filter.label }}</label>
 
-          <!-- Input Text -->
+          <!-- Text -->
           <input
             *ngIf="filter.type === 'text'"
             type="text"
             [(ngModel)]="filterValues[filter.field]"
-            (keyup.enter)="onFilter()"
-            [placeholder]="filter.placeholder || 'Pesquisar...'"
-            class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 focus:outline-none focus:border-[#4C72FF] h-[42px]"
+            (keyup.enter)="onFilter(); toggleFilter()"
+            class="w-full px-4 py-2 border rounded-xl bg-gray-50"
           />
 
           <!-- Select -->
           <select
             *ngIf="filter.type === 'select'"
             [(ngModel)]="filterValues[filter.field]"
-            class="w-full px-4 py-2.5 border bg-gray-50 rounded-xl text-gray-600 focus:outline-none focus:border-[#4C72FF] h-[42px]"
+            class="w-full px-4 py-2 border rounded-xl bg-gray-50"
           >
             <option value="">Todos</option>
-            <option *ngFor="let option of filter.options" [value]="option.value">
-              {{ option.label }}
+            <option *ngFor="let opt of filter.options" [value]="opt.value">
+              {{ opt.label }}
             </option>
           </select>
 
@@ -50,200 +112,81 @@
             *ngIf="filter.type === 'number'"
             type="number"
             [(ngModel)]="filterValues[filter.field]"
-            (keyup.enter)="onFilter()"
-            [placeholder]="filter.placeholder || 'Número...'"
-            class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 focus:outline-none focus:border-[#4C72FF] h-[42px]"
+            class="w-full px-4 py-2 border rounded-xl bg-gray-50"
           />
         </div>
       </div>
 
-      <!-- Botões - Lado Direito Fixo -->
-      <div class="flex gap-2 items-end">
-        <!-- Botão Pesquisar com Ícone de Busca -->
+      <div class="mt-6 flex flex-col gap-3">
         <button
-          class="flex items-center px-5 py-2 gap-2 bg-gray-500 text-white rounded-lg shadow hover:bg-blue-700 justify-between"
-          (click)="onFilter()"
+          (click)="onFilter(); toggleFilter()"
+          class="w-full px-4 py-2 bg-blue-700 text-white rounded-xl shadow"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            ></path>
-          </svg>
-          PESQUISAR
+          Aplicar Filtros
         </button>
 
-        <!-- Botão Limpar com Ícone de Filtro -->
         <button
           *ngIf="hasActiveFilters"
-          class="flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 text-sm min-w-[100px] justify-center h-[42px]"
           (click)="onClearFilters()"
+          class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
-            ></path>
-          </svg>
           Limpar
+        </button>
+
+        <button (click)="toggleFilter()" class="w-full px-4 py-2 bg-gray-200 rounded-xl">
+          Fechar
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Table Card -->
-  <div class="bg-white p-6 rounded-2xl shadow-md">
-    <!-- Top of Table -->
-    <div class="flex justify-between items-center mb-4">
-      <div class="font-semibold text-gray-800">
-        <span *ngIf="hasActiveFilters" class="text-sm text-gray-500 ml-2">
-          ({{ displayData.length }} resultado{{ displayData.length !== 1 ? 's' : '' }})
-        </span>
-      </div>
-    </div>
+  <!-- Botão flutuante (apenas MOBILE) -->
+  <button
+    *ngIf="config.showFilters && config.filters"
+    class="fixed bottom-5 right-5 bg-blue-700 text-white px-5 py-3 rounded-full shadow-xl md:hidden z-50"
+    (click)="toggleFilter()"
+  >
+    🔍 Filtros
+  </button>
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-left">
-        <thead class="text-gray-500 text-sm">
-          <tr>
-            <th *ngIf="showCheckbox" class="p-3">
-              <input type="checkbox" />
-            </th>
+  <!-- Tabela -->
+  <div class="overflow-x-auto bg-white shadow-md rounded-xl">
+    <table class="min-w-full border-collapse">
+      <thead class="bg-gray-100">
+        <tr>
+          <th *ngIf="showCheckbox" class="p-3 text-left text-gray-600">
+            <input type="checkbox" />
+          </th>
 
-            <th *ngFor="let col of columns" class="p-3 font-semibold">
-              {{ col.header }}
-            </th>
+          <th *ngFor="let col of columns" class="p-3 text-left text-gray-600" [ngClass]="col.class">
+            {{ col.header }}
+          </th>
 
-            <th *ngIf="actions.length > 0" class="p-3">Ações</th>
-          </tr>
-        </thead>
+          <th *ngIf="actions.length > 0" class="p-3 text-left text-gray-600">Ações</th>
+        </tr>
+      </thead>
 
-        <tbody class="text-gray-700">
-          <ng-container *ngIf="displayData.length > 0; else noData">
-            <tr
-              *ngFor="let row of displayData"
-              class="border-t hover:bg-gray-50 transition cursor-pointer"
-              (click)="onRowClick(row)"
-            >
-              <td *ngIf="showCheckbox" class="p-3">
-                <input type="checkbox" />
-              </td>
+      <tbody>
+        <tr *ngFor="let row of displayData" class="hover:bg-gray-50 cursor-pointer border-b">
+          <td *ngIf="showCheckbox" class="p-3">
+            <input type="checkbox" />
+          </td>
 
-              <td *ngFor="let col of columns" class="p-3" [ngClass]="col.class">
-                {{ col.format ? col.format(row[col.field], row) : row[col.field] }}
-              </td>
+          <td *ngFor="let col of columns" class="p-3" (click)="onRowClick(row)">
+            {{ col.format ? col.format(row[col.field], row) : row[col.field] }}
+          </td>
 
-              <td *ngIf="actions.length > 0" class="p-3">
-                <div class="flex gap-2">
-                  <button
-                    *ngFor="let action of actions"
-                    (click)="action.onClick(row); $event.stopPropagation()"
-                    class="px-3 py-1 rounded-lg text-white text-sm transition-colors"
-                    [ngClass]="action.class"
-                    [title]="action.label"
-                  >
-                    {{ action.label }}
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </ng-container>
-
-          <ng-template #noData>
-            <tr>
-              <td
-                [attr.colspan]="
-                  columns.length + (showCheckbox ? 1 : 0) + (actions.length > 0 ? 1 : 0)
-                "
-                class="p-4 text-center text-gray-500"
-              >
-                {{ data === null ? 'Carregando...' : 'Nenhum registro encontrado' }}
-              </td>
-            </tr>
-          </ng-template>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Paginação -->
-    <div
-      *ngIf="config.showPagination && paginationConfig.totalItems > 0"
-      class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-gray-200"
-    >
-      <!-- Informações de exibição -->
-      <div class="text-sm text-gray-600">
-        Mostrando {{ startItem }} a {{ endItem }} de
-        {{ paginationConfig.totalItems | number }} registros
-      </div>
-
-      <!-- Controles de paginação -->
-      <div class="flex items-center gap-4">
-        <!-- Itens por página -->
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-gray-600">Itens por página:</span>
-          <select
-            (change)="onItemsPerPageChange($event)"
-            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-[#4C72FF]"
-          >
-            <option value="5" [selected]="paginationConfig.itemsPerPage === 5">5</option>
-            <option value="10" [selected]="paginationConfig.itemsPerPage === 10">10</option>
-            <option value="25" [selected]="paginationConfig.itemsPerPage === 25">25</option>
-            <option value="50" [selected]="paginationConfig.itemsPerPage === 50">50</option>
-          </select>
-        </div>
-
-        <!-- Navegação de páginas -->
-        <div class="flex items-center gap-1">
-          <!-- Botão Anterior -->
-          <button
-            (click)="onPageChange(paginationConfig.currentPage - 1)"
-            [disabled]="paginationConfig.currentPage === 1"
-            class="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
-            title="Página anterior"
-          >
-            ‹
-          </button>
-
-          <!-- Números das páginas -->
-          <ng-container *ngFor="let page of pages">
+          <td *ngIf="actions.length > 0" class="p-3 flex gap-2">
             <button
-              *ngIf="page !== -1"
-              (click)="onPageChange(page)"
-              [class.bg-[#4C72FF]!]="page === paginationConfig.currentPage"
-              [class.text-white!]="page === paginationConfig.currentPage"
-              [class.border-[#4C72FF]!]="page === paginationConfig.currentPage"
-              class="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 text-sm min-w-[40px] transition-colors"
+              *ngFor="let action of actions"
+              (click)="action.onClick(row)"
+              class="px-2 py-1 rounded bg-blue-600 text-white text-xs"
             >
-              {{ page }}
+              {{ action.label }}
             </button>
-
-            <span *ngIf="page === -1" class="px-2 text-gray-500 text-sm">...</span>
-          </ng-container>
-
-          <!-- Botão Próximo -->
-          <button
-            (click)="onPageChange(paginationConfig.currentPage + 1)"
-            [disabled]="paginationConfig.currentPage === paginationConfig.totalPages"
-            class="px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
-            title="Próxima página"
-          >
-            ›
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mensagem quando não há dados -->
-    <div
-      *ngIf="(!data || data.length === 0) && config.showPagination"
-      class="text-center py-8 text-gray-500"
-    >
-      Nenhum registro encontrado
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
