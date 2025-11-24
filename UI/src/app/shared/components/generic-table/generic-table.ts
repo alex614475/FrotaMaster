@@ -54,6 +54,7 @@ export interface PaginationEvent {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './generic-table.html',
+  styleUrls: ['./generc.css'],
 })
 export class GenericTableComponent implements OnInit {
   @Input() config: TableConfig = {
