@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace FrotaMaster.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/veiculos")]
     public class VeiculoController : ControllerBase
     {
         private readonly VeiculoService _service;

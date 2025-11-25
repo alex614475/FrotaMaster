@@ -84,7 +84,6 @@ export class CadastroMotoristaComponent implements OnInit {
       categoriaCNH: this.motoristaForm.value.categoriaCnh,
       telefone: this.motoristaForm.value.telefone,
       status: this.motoristaForm.value.status,
-      rotas: [],
     };
 
     if (this.motoristaId) {

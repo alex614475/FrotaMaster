@@ -20,7 +20,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'veiculos/editar/:id', // edição
+    path: 'veiculos/editar/:id',
     loadComponent: () =>
       import('./features/veiculos/pages/veiculos-form/veiculo-form').then(
         (c) => c.VeiculoFormComponent
@@ -34,14 +34,14 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'motoristas/cadastro', // cadastro
+    path: 'motoristas/cadastro',
     loadComponent: () =>
       import('./features/motorista/pages/motorista-form/motorista-form').then(
         (c) => c.CadastroMotoristaComponent
       ),
   },
   {
-    path: 'motoristas/editar/:id', // edição
+    path: 'motoristas/editar/:id',
     loadComponent: () =>
       import('./features/motorista/pages/motorista-form/motorista-form').then(
         (c) => c.CadastroMotoristaComponent
@@ -55,33 +55,19 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'manutencao/cadastro', // cadastro
+    path: 'manutencao/cadastro',
     loadComponent: () =>
       import('./features/manutencao/pages/manutencao-form/manutencao-form').then(
         (c) => c.ManutencaoFormComponent
       ),
   },
   {
-    path: 'manutencao/editar/:id', // edição
+    path: 'manutencao/editar/:id',
     loadComponent: () =>
       import('./features/manutencao/pages/manutencao-form/manutencao-form').then(
         (c) => c.ManutencaoFormComponent
       ),
   },
 
-  {
-    path: 'distribuicao',
-    loadComponent: () =>
-      import(
-        './features/distribuicao-da-frota/pages/distribuicao-da-frota-list/distribuicao-da-frota-list'
-      ).then((m) => m.DistribuicaoDaFrotaListComponent),
-  },
-  {
-    path: 'distribuicao-da-frota-form',
-    loadComponent: () =>
-      import(
-        './features/distribuicao-da-frota/pages/distribuicao-da-frota-form/distribuicao-da-frota-form'
-      ).then((m) => m.DistribuicaoDaFrotaFormComponent),
-  },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

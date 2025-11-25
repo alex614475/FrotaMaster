@@ -5,7 +5,7 @@ using FrotaMaster.Application.Services;
 namespace FrotaMaster.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/motoristas")]
     public class MotoristaController : ControllerBase
     {
         private readonly MotoristaService _service;
