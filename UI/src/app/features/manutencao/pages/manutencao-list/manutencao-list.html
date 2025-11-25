@@ -1,82 +1,10 @@
-<div class="p-6">
-  <!-- Cabeçalho + Botão -->
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold">Manutenções de Veículos</h2>
-    <button
-      class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-      (click)="onCadastrar()"
-    >
-      Nova Manutenção
-    </button>
-  </div>
-  <!-- Tabela -->
-  <div class="overflow-x-auto shadow rounded-lg border border-gray-200">
-    <table class="min-w-full bg-white">
-      <thead class="bg-gray-100 border-b">
-        <tr>
-          <th class="px-4 py-3 text-left">ID</th>
-          <th class="px-4 py-3 text-left">Veículo</th>
-          <th class="px-4 py-3 text-left">Tipo</th>
-          <th class="px-4 py-3 text-left">Descrição</th>
-          <th class="px-4 py-3 text-left">Custo</th>
-          <th class="px-4 py-3 text-left">Status</th>
-          <th class="px-4 py-3 text-left w-24"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let m of manutencoes$ | async" class="border-b hover:bg-gray-50 transition">
-          <td class="px-4 py-3">{{ m.id }}</td>
-          <!-- Exibe o modelo do veículo -->
-          <td class="px-4 py-3">{{ m.veiculoModelo }}</td>
-          <td class="px-4 py-3">{{ m.tipo }}</td>
-          <td class="px-4 py-3">
-            <div class="max-w-xs truncate">{{ m.descricao }}</div>
-          </td>
-          <td class="px-4 py-3">R$ {{ m.custo | number : '1.2-2' }}</td>
-          <!-- STATUS COM CORES -->
-          <td class="px-4 py-3">
-            <span
-              class="relative inline-block px-3 py-1 font-semibold leading-tight"
-              [ngClass]="{
-                'text-blue-900': m.status === 'Agendada',
-                'text-yellow-900': m.status === 'EmAndamento',
-                'text-green-900': m.status === 'Concluida',
-                'text-red-900': m.status === 'Cancelada'
-              }"
-            >
-              <span
-                class="absolute inset-0 opacity-50 rounded-full"
-                [ngClass]="{
-                  'bg-blue-200': m.status === 'Agendada',
-                  'bg-yellow-200': m.status === 'EmAndamento',
-                  'bg-green-200': m.status === 'Concluida',
-                  'bg-red-200': m.status === 'Cancelada'
-                }"
-              ></span>
-              <span class="relative">
-                {{
-                  m.status === 'Agendada'
-                    ? 'Agendada'
-                    : m.status === 'EmAndamento'
-                    ? 'Em Andamento'
-                    : m.status === 'Concluida'
-                    ? 'Concluída'
-                    : 'Cancelada'
-                }}
-              </span>
-            </span>
-          </td>
-          <!-- AÇÃO -->
-          <td class="px-4 py-3">
-            <button
-              (click)="onEditar(m.id!)"
-              class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-            >
-              Editar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<app-generic-table
+  [config]="tableConfig"
+  [paginationConfig]="paginationConfig"
+  [data]="manutencoes$ | async"
+  [columns]="columns"
+  [actions]="actions"
+  (addNew)="onCadastrar()"
+  (rowClick)="onEditar($event.id)"
+  (pageChange)="onPageChange($event)"
+></app-generic-table>
