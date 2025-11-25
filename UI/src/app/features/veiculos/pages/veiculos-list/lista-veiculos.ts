@@ -36,7 +36,7 @@ export class ListaVeiculosComponent implements OnInit {
   tableConfig: TableConfig = {
     title: 'Lista de Veículos',
     addButton: {
-      label: 'Adicionar Veículo',
+      label: 'Cadastrar Veículo',
     },
     filters: [
       {

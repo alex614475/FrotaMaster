@@ -35,7 +35,7 @@ export class DistribuicaoDaFrotaListComponent implements OnInit {
   tableConfig: TableConfig = {
     title: 'Distribuição da Frota',
     addButton: {
-      label: 'Cadastrar Motorista',
+      label: 'Cadastrar Distribuição',
     },
     filters: [
       {

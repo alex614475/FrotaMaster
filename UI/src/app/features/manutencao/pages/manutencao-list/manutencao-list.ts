@@ -37,7 +37,7 @@ export class ManutencaoListComponent implements OnInit {
   tableConfig: TableConfig = {
     title: 'Manutenções de Veículos',
     addButton: {
-      label: 'Nova Manutenção',
+      label: 'Cadastrar Manutenção',
     },
     showFilters: false,
     showPagination: true,
