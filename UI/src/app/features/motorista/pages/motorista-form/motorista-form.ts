@@ -16,7 +16,7 @@ export class CadastroMotoristaComponent implements OnInit {
   submitted = false;
   loading = false;
 
-  motoristaId: number | null = null; // Para diferenciar cadastro e edição
+  motoristaId: number | null = null;
 
   categoriasCnh = ['A', 'B', 'C', 'D', 'E'];
   statusOptions = ['Disponivel', 'EmViagem', 'Ferias'];
@@ -27,6 +27,7 @@ export class CadastroMotoristaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    // Formulário padronizado
     this.motoristaForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       cnh: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
@@ -37,7 +38,6 @@ export class CadastroMotoristaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Verifica se há ID na rota (edição)
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
@@ -47,8 +47,8 @@ export class CadastroMotoristaComponent implements OnInit {
     });
   }
 
-  // Carrega dados do motorista no formulário
-  carregarMotorista(id: number) {
+  // Carrega dados no formulário para edição
+  carregarMotorista(id: number): void {
     this.motoristaService.obterMotorista(id).subscribe({
       next: (motorista: Motorista) => {
         this.motoristaForm.patchValue({
@@ -66,53 +66,53 @@ export class CadastroMotoristaComponent implements OnInit {
     });
   }
 
-  // Chamado pelo (ngSubmit)
+  // Envio do formulário
   onSubmit(): void {
     this.submitted = true;
 
-    if (this.motoristaForm.valid) {
-      this.loading = true;
-
-      // Monta o objeto completo, incluindo ID e rotas (mesmo que vazio)
-      const dados: Motorista = {
-        id: this.motoristaId || 0, // 0 para backend criar novo
-        nome: this.motoristaForm.value.nome,
-        cnh: this.motoristaForm.value.cnh,
-        categoriaCNH: this.motoristaForm.value.categoriaCnh,
-        telefone: this.motoristaForm.value.telefone,
-        status: this.motoristaForm.value.status,
-        rotas: [], // sempre enviar array vazio se não houver
-      };
-
-      if (this.motoristaId) {
-        // Edição
-        this.motoristaService.atualizarMotorista(this.motoristaId, dados).subscribe({
-          next: () => {
-            this.loading = false;
-            alert('Motorista atualizado com sucesso!');
-            this.router.navigate(['/motoristas']);
-          },
-          error: (error) => {
-            this.loading = false;
-            alert('Erro ao atualizar motorista: ' + error.message);
-          },
-        });
-      } else {
-        // Cadastro
-        this.motoristaService.criarMotorista(dados).subscribe({
-          next: () => {
-            this.loading = false;
-            alert('Motorista cadastrado com sucesso!');
-            this.router.navigate(['/motoristas']);
-          },
-          error: (error) => {
-            this.loading = false;
-            alert('Erro ao cadastrar motorista: ' + error.message);
-          },
-        });
-      }
-    } else {
+    if (this.motoristaForm.invalid) {
       this.motoristaForm.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+
+    const dados: Motorista = {
+      id: this.motoristaId || 0,
+      nome: this.motoristaForm.value.nome,
+      cnh: this.motoristaForm.value.cnh,
+      categoriaCNH: this.motoristaForm.value.categoriaCnh,
+      telefone: this.motoristaForm.value.telefone,
+      status: this.motoristaForm.value.status,
+      rotas: [],
+    };
+
+    if (this.motoristaId) {
+      // Atualizar
+      this.motoristaService.atualizarMotorista(this.motoristaId, dados).subscribe({
+        next: () => {
+          this.loading = false;
+          alert('Motorista atualizado com sucesso!');
+          this.router.navigate(['/motoristas']);
+        },
+        error: (error) => {
+          this.loading = false;
+          alert('Erro ao atualizar motorista: ' + error.message);
+        },
+      });
+    } else {
+      // Criar
+      this.motoristaService.criarMotorista(dados).subscribe({
+        next: () => {
+          this.loading = false;
+          alert('Motorista cadastrado com sucesso!');
+          this.router.navigate(['/motoristas']);
+        },
+        error: (error) => {
+          this.loading = false;
+          alert('Erro ao cadastrar motorista: ' + error.message);
+        },
+      });
     }
   }
 
@@ -124,16 +124,17 @@ export class CadastroMotoristaComponent implements OnInit {
   // Máscara de telefone
   formatarTelefone(event: any): void {
     let value = event.target.value.replace(/\D/g, '');
+
     if (value.length > 11) value = value.substring(0, 11);
 
-    if (value.length > 10) {
+    if (value.length >= 11) {
       value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-    } else if (value.length > 6) {
-      value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
-    } else if (value.length > 2) {
-      value = value.replace(/(\d{2})(\d{4})/, '($1) $2');
-    } else if (value.length > 0) {
-      value = value.replace(/(\d{2})/, '($1)');
+    } else if (value.length >= 7) {
+      value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (value.length >= 3) {
+      value = value.replace(/(\d{2})(\d{0,4})/, '($1) $2');
+    } else if (value.length >= 1) {
+      value = value.replace(/(\d{0,2})/, '($1');
     }
 
     this.motoristaForm.patchValue({ telefone: value }, { emitEvent: false });

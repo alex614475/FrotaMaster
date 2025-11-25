@@ -17,6 +17,9 @@ export class VeiculoFormComponent implements OnInit {
   loading = false;
   veiculoId: number | null = null;
 
+  // 👇 ADICIONADO
+  titulo = 'Cadastrar Veículo';
+
   marcas = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Volkswagen'];
   statusOptions = ['Ativo', 'Inativo', 'Manutenção'];
 
@@ -46,6 +49,10 @@ export class VeiculoFormComponent implements OnInit {
         const id = Number(idParam);
         if (!isNaN(id)) {
           this.veiculoId = id;
+
+          // 👇 ATUALIZA O TÍTULO AUTOMATICAMENTE
+          this.titulo = 'Editar Veículo';
+
           this.carregarVeiculo(id);
         }
       }
@@ -76,6 +83,7 @@ export class VeiculoFormComponent implements OnInit {
     if (this.veiculoForm.valid) {
       this.loading = true;
       const formValue = this.veiculoForm.value;
+
       const veiculo: Veiculo = {
         id: this.veiculoId || 0,
         placa: formValue.placa,
@@ -89,7 +97,6 @@ export class VeiculoFormComponent implements OnInit {
       };
 
       if (this.veiculoId) {
-        // Edição
         this.veiculoService.atualizarVeiculo(this.veiculoId, veiculo).subscribe({
           next: () => {
             this.loading = false;
@@ -102,7 +109,6 @@ export class VeiculoFormComponent implements OnInit {
           },
         });
       } else {
-        // Cadastro
         this.veiculoService.criarVeiculo(veiculo).subscribe({
           next: () => {
             this.loading = false;
