@@ -8,9 +8,7 @@ namespace FrotaMaster.Domain.Entities
         public string CNH { get; set; } = string.Empty;
         public string CategoriaCNH { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
-        public string Status { get; set; } = "Disponivel"; // Disponivel, EmViagem, Ferias
+        public string Status { get; set; } = "Disponivel";
 
-        // Relacionamentos
-        public List<Rota> Rotas { get; set; } = new();
     }
 }

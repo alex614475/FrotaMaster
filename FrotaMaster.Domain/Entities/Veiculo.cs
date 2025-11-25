@@ -9,10 +9,10 @@ namespace FrotaMaster.Domain.Entities
         public string Marca { get; set; } = string.Empty;
         public int Ano { get; set; }
         public int Quilometragem { get; set; }
-        public string Status { get; set; } = "Disponivel"; // Disponivel, EmManutencao, EmUso
+        public string Status { get; set; } = "Disponivel";
 
         // Relacionamentos
         public List<Manutencao> Manutencoes { get; set; } = new();
-        public List<Rota> Rotas { get; set; } = new();
+      
     }
 }

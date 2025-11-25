@@ -13,8 +13,7 @@ namespace FrotaMaster.Infrastructure.Persistence
         public DbSet<Veiculo> Veiculos { get; set; }
         public DbSet<Motorista> Motoristas { get; set; }
         public DbSet<Manutencao> Manutencoes { get; set; }
-        public DbSet<Rota> Rotas { get; set; }
-        public DbSet<DistribuicaoRota> DistribuicoesRota { get; set; }
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,28 +47,7 @@ namespace FrotaMaster.Infrastructure.Persistence
                 e.HasOne(m => m.Veiculo).WithMany(v => v.Manutencoes).HasForeignKey(m => m.VeiculoId);
             });
 
-            modelBuilder.Entity<Rota>(e =>
-            {
-                e.ToTable("rotas");
-                e.HasKey(r => r.Id);
-                e.Property(r => r.Origem).IsRequired().HasMaxLength(100);
-                e.Property(r => r.Destino).IsRequired().HasMaxLength(100);
-                e.Property(r => r.Status).HasMaxLength(20).HasDefaultValue("Agendada");
-                e.HasOne(r => r.Veiculo).WithMany(v => v.Rotas).HasForeignKey(r => r.VeiculoId);
-                e.HasOne(r => r.Motorista).WithMany(m => m.Rotas).HasForeignKey(r => r.MotoristaId);
-            });
-
-            modelBuilder.Entity<DistribuicaoRota>(e =>
-            {
-                e.ToTable("distribuicoes_rota");
-                e.HasKey(d => d.Id);
-                e.Property(d => d.Latitude).IsRequired();
-                e.Property(d => d.Longitude).IsRequired();
-                e.Property(d => d.DataRegistro).IsRequired();
-                e.Property(d => d.Observacao).HasMaxLength(255);
-                e.Property(d => d.Status).HasMaxLength(20); // ← Adicionar se necessário
-                e.HasOne(d => d.Rota).WithMany(r => r.Distribuicoes).HasForeignKey(d => d.RotaId);
-            });
+    
         }
     }
 }

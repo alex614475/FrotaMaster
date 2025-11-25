@@ -38,13 +38,13 @@ namespace FrotaMaster.Infrastructure.Repositories
         public async Task<Veiculo?> GetByIdAsync(int id)
         {
             return await _context.Veiculos
-                .AsNoTracking() // Evita problemas de tracking
+                .AsNoTracking() 
                 .FirstOrDefaultAsync(v => v.Id == id);
         }
 
         public async Task UpdateAsync(Veiculo veiculo)
         {
-            // Método seguro: buscar a entidade existente e atualizar valores
+           
             var existingVeiculo = await _context.Veiculos.FindAsync(veiculo.Id);
             if (existingVeiculo != null)
             {
