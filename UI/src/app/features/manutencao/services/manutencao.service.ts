@@ -8,7 +8,7 @@ import { Veiculo } from '../../../models/veiculo.model';
   providedIn: 'root',
 })
 export class ManutencaoService {
-  private endpoint = 'manutencao';
+  private endpoint = 'manutencoes';
 
   constructor(private api: ApiService) {}
 

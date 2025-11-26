@@ -8,25 +8,27 @@ import { Veiculo } from '../../../models/veiculo.model';
   providedIn: 'root',
 })
 export class VeiculoService {
+  private endpoint = 'veiculos';
+
   constructor(private api: ApiService) {}
 
   criarVeiculo(veiculo: Veiculo): Observable<Veiculo> {
-    return this.api.post<Veiculo>('Veiculo', veiculo);
+    return this.api.post<Veiculo>(this.endpoint, veiculo);
   }
 
   listarVeiculos(): Observable<Veiculo[]> {
-    return this.api.get<Veiculo[]>('Veiculo');
+    return this.api.get<Veiculo[]>(this.endpoint);
   }
 
   obterVeiculo(id: number): Observable<Veiculo> {
-    return this.api.get<Veiculo>(`Veiculo/${id}`);
+    return this.api.get<Veiculo>(`${this.endpoint}/${id}`);
   }
 
   atualizarVeiculo(id: number, veiculo: Veiculo): Observable<Veiculo> {
-    return this.api.put<Veiculo>(`Veiculo/${id}`, veiculo);
+    return this.api.put<Veiculo>(`${this.endpoint}/${id}`, veiculo);
   }
 
   deletarVeiculo(id: number): Observable<any> {
-    return this.api.delete(`Veiculo/${id}`);
+    return this.api.delete(`${this.endpoint}/${id}`);
   }
 }

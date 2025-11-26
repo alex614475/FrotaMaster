@@ -8,7 +8,7 @@ import { Motorista } from '../../../models/motorista.model';
   providedIn: 'root',
 })
 export class MotoristaService {
-  private endpoint = 'Motorista';
+  private endpoint = 'motoristas';
 
   constructor(private api: ApiService) {}
 
