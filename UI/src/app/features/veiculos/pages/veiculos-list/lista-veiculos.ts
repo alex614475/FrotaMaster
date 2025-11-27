@@ -1,6 +1,5 @@
 // lista-veiculos.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
@@ -19,7 +18,7 @@ import {
 @Component({
   selector: 'app-lista-veiculos',
   standalone: true,
-  imports: [CommonModule, GenericTableComponent],
+  imports: [GenericTableComponent],
   templateUrl: './lista-veiculos.html',
 })
 export class ListaVeiculosComponent implements OnInit {
