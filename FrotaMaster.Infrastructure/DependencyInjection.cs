@@ -22,7 +22,8 @@ namespace FrotaMaster.Infrastructure
             services.AddScoped<IVeiculoRepository, VeiculoRepository>();
             services.AddScoped<IMotoristaRepository, MotoristaRepository>();
             services.AddScoped<IManutencaoRepository, ManutencaoRepository>();
-    
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
             return services;
         }
     }

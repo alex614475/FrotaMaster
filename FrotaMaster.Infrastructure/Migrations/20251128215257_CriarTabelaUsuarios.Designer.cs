@@ -2,6 +2,7 @@
 using FrotaMaster.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FrotaMaster.Infrastructure.Migrations
 {
     [DbContext(typeof(FrotaMasterDbContext))]
-    partial class FrotaMasterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251128215257_CriarTabelaUsuarios")]
+    partial class CriarTabelaUsuarios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

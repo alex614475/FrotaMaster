@@ -13,7 +13,8 @@ namespace FrotaMaster.Infrastructure.Persistence
         public DbSet<Veiculo> Veiculos { get; set; }
         public DbSet<Motorista> Motoristas { get; set; }
         public DbSet<Manutencao> Manutencoes { get; set; }
-      
+        public DbSet<Usuario> Usuarios { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,7 +48,19 @@ namespace FrotaMaster.Infrastructure.Persistence
                 e.HasOne(m => m.Veiculo).WithMany(v => v.Manutencoes).HasForeignKey(m => m.VeiculoId);
             });
 
-    
+
+            modelBuilder.Entity<Usuario>(e =>
+            {
+                e.ToTable("usuarios");
+                e.HasKey(u => u.Id);
+                e.Property(u => u.Nome).IsRequired().HasMaxLength(100);
+                e.Property(u => u.Email).IsRequired().HasMaxLength(100);
+                e.Property(u => u.Senha).IsRequired().HasMaxLength(200);
+                e.Property(u => u.Perfil).HasMaxLength(20).HasDefaultValue("Usuario");
+                e.Property(u => u.Ativo).HasDefaultValue(true);
+                e.HasIndex(u => u.Email).IsUnique();
+            });
+
         }
     }
 }
