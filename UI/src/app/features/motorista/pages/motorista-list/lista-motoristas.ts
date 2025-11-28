@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import {
 @Component({
   selector: 'app-lista-motoristas',
   standalone: true,
-  imports: [CommonModule, GenericTableComponent],
+  imports: [AsyncPipe, GenericTableComponent],
   templateUrl: './lista-motoristas.html',
 })
 export class ListaMotoristasComponent implements OnInit {

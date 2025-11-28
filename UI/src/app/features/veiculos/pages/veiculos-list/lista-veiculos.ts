@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-
+import { AsyncPipe } from '@angular/common';
 import { Veiculo } from '../../../../models/veiculo.model';
 import { VeiculoService } from '../../services/veiculo.service';
 import {
@@ -18,7 +18,7 @@ import {
 @Component({
   selector: 'app-lista-veiculos',
   standalone: true,
-  imports: [GenericTableComponent],
+  imports: [GenericTableComponent, AsyncPipe],
   templateUrl: './lista-veiculos.html',
 })
 export class ListaVeiculosComponent implements OnInit {
