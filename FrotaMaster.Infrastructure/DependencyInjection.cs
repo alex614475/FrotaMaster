@@ -5,6 +5,7 @@ using FrotaMaster.Infrastructure.Persistence;
 using FrotaMaster.Domain.Repositories;
 using FrotaMaster.Infrastructure.Repositories;
 
+
 namespace FrotaMaster.Infrastructure
 {
     public static class DependencyInjection

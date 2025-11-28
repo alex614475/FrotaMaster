@@ -1,12 +1,29 @@
-﻿using FrotaMaster.Infrastructure;
+﻿using FrotaMaster.API.Authentication;
 using FrotaMaster.Application;
-using Microsoft.OpenApi.Models;
+using FrotaMaster.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
+
+
+// Application
+builder.Services.AddApplication();
+
+builder.Services.AddScoped<ITokenManager, TokenManager>();
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters =
+            TokenHelpers.GetTokenValidationParameters(builder.Configuration);
+    });
+
+builder.Services.AddAuthorization();
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -20,13 +37,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Application
-builder.Services.AddApplication();
 
 // Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
@@ -41,7 +56,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 
-// 🚀 **AUTO-MIGRATE NO RAILWAY**
+
 using (var scope = app.Services.CreateScope())
 {
     try
@@ -58,27 +73,29 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-// Swagger dev only
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// CORS
+
 app.UseCors("AllowAngular");
 
-// 👉 Frontend Angular
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// API Controllers
 app.MapControllers();
 
-// Test route
+
 app.MapGet("/ping", () => "FrotaMaster API rodando!");
 
-// 👉 SPA fallback
+
 app.MapFallbackToFile("index.html");
 
 app.Run();
+

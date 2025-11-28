@@ -1,4 +1,5 @@
 ﻿
+using FrotaMaster.Domain.Entities;
 using FrotaMaster.Domain.Repositories;
 using FrotaMaster.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

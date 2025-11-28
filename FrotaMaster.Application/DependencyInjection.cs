@@ -10,7 +10,8 @@ namespace FrotaMaster.Application
 
             services.AddScoped<VeiculoService>();
             services.AddScoped<MotoristaService>();
-            services.AddScoped<ManutencaoService>();
+            services.AddScoped<ManutencaoService>(); 
+            services.AddScoped<UsuarioService>();
             return services;
         }
     }
