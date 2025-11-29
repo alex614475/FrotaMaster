@@ -3,6 +3,8 @@ using FrotaMaster.Application;
 using FrotaMaster.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using FrotaMaster.Application.Authentication; 
+
 
 var builder = WebApplication.CreateBuilder(args);
 

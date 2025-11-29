@@ -7,9 +7,13 @@ namespace FrotaMaster.API.Authentication
     {
         public static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration)
         {
-            var tokenKey = Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]);
+            var secret = configuration["JwtSettings:SecretKey"];
+            if (string.IsNullOrEmpty(secret))
+                throw new InvalidOperationException("JWT SecretKey não configurada.");
 
-            return new TokenValidationParameters()
+            var tokenKey = Encoding.UTF8.GetBytes(secret);
+
+            return new TokenValidationParameters
             {
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,

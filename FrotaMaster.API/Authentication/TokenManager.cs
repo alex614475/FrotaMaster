@@ -1,56 +1,82 @@
-﻿using FrotaMaster.Application;  
+﻿using FrotaMaster.Application.Authentication;
 using FrotaMaster.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace FrotaMaster.Infrastructure
+namespace FrotaMaster.API.Authentication;
+
+public class TokenManager : ITokenManager
 {
-    public class TokenManager : ITokenManager
+    private readonly IConfiguration _configuration;
+
+    public TokenManager(IConfiguration configuration)
     {
-        private readonly IConfiguration _config;
+        _configuration = configuration;
+    }
 
-        public TokenManager(IConfiguration config)
+    public string GerarToken(Usuario usuario)
+    {
+        var secret = _configuration["JwtSettings:SecretKey"];
+        if (string.IsNullOrEmpty(secret))
+            throw new InvalidOperationException("JWT SecretKey não configurada.");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[]
         {
-            _config = config;
+            new Claim(JwtRegisteredClaimNames.Sub, usuario.Email),
+            new Claim("perfil", usuario.Perfil),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["JwtSettings:Issuer"],
+            audience: _configuration["JwtSettings:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:ExpirationTimeInMinutes"]!)),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GerarRefreshToken(Usuario usuario)
+    {
+        // Aqui poderia criar refresh token persistente, mas por enquanto só retorno um JWT simples de refresh
+        var secret = _configuration["JwtSettings:SecretKey"];
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["JwtSettings:Issuer"],
+            audience: _configuration["JwtSettings:Audience"],
+            expires: DateTime.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:RefreshExpirationTimeInMinutes"]!)),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<(bool isValid, string nomeUsuario)> ValidateTokenAsync(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        try
+        {
+            var validationParameters = TokenHelpers.GetTokenValidationParameters(_configuration);
+
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
+
+            var nomeUsuario = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            return (true, nomeUsuario!);
         }
-
-        public string GerarToken(Usuario usuario)
+        catch
         {
-            var key = Encoding.UTF8.GetBytes(_config["JwtSettings:SecretKey"]);
-            var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                new Claim("id", usuario.Id.ToString()),
-                new Claim("nome", usuario.Nome),
-                new Claim("perfil", usuario.Perfil),
-                new Claim("ativo", usuario.Ativo.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, usuario.Email)
-            };
-
-            var expiracaoMin = int.Parse(_config["JwtSettings:ExpirationTimeInMinutes"]);
-
-            var token = new JwtSecurityToken(
-                issuer: _config["JwtSettings:Issuer"],
-                audience: _config["JwtSettings:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expiracaoMin),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public string GerarRefreshToken(Usuario usuario)
-        {
-            return Guid.NewGuid().ToString();
-        }
-
-        public Task<(bool isValid, string? Nome)> ValidateTokenAsync(string token)
-        {
-            return Task.FromResult((true, "ok"));
+            return (false, string.Empty);
         }
     }
 }
