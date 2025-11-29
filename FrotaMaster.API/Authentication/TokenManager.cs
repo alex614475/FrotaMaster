@@ -19,17 +19,16 @@ public class TokenManager : ITokenManager
 
     public string GerarToken(Usuario usuario)
     {
-        var secret = _configuration["JwtSettings:SecretKey"];
-        if (string.IsNullOrEmpty(secret))
-            throw new InvalidOperationException("JWT SecretKey não configurada.");
+        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var creds = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, usuario.Email),
-            new Claim("perfil", usuario.Perfil),
+            new Claim(ClaimTypes.Role, usuario.Perfil),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
@@ -46,10 +45,11 @@ public class TokenManager : ITokenManager
 
     public string GerarRefreshToken(Usuario usuario)
     {
-        // Aqui poderia criar refresh token persistente, mas por enquanto só retorno um JWT simples de refresh
-        var secret = _configuration["JwtSettings:SecretKey"];
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(jwtSettings["SecretKey"] ?? string.Empty));
+
+        var creds = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: _configuration["JwtSettings:Issuer"],
