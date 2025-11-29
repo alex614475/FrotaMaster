@@ -6,6 +6,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.DashboardComponent),
   },
   {
+    path: 'login',
+    loadComponent: () => import('./features/login/page/login').then((c) => c.LoginComponent),
+  },
+  {
     path: 'veiculos',
     loadComponent: () =>
       import('./features/veiculos/pages/veiculos-list/lista-veiculos').then(

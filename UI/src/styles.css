@@ -3,7 +3,8 @@
 @import 'tailwindcss';
 
 body {
-  font-family: 'Inter', sans-serif;
+  height: 100vh;
+  font-family: 'Roboto', sans-serif;
 }
 /* Caminhão passando atrás dos botões */
 .truck-bg-run {
