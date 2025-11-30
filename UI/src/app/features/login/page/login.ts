@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -14,26 +14,28 @@ import {
 
 import { LoginRequest } from '../../../models/Login.model';
 import { LoginService } from '../service/login.service';
+import { Alert } from '../../../shared/components/generic-alert/alert';
+import { AlertService } from '../../../shared/components/generic-alert/Alert.service';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgIf, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, Alert], // adicionado NgIf
   templateUrl: './login.html',
 })
 export class LoginComponent {
   email = '';
   senha = '';
   loading = false;
-  erro: string | null = null;
 
   constructor(
     private location: Location,
     private loginService: LoginService,
     private storageService: StorageService,
+    private alertService: AlertService,
     private title: Title
   ) {
-    // 🔥 Ajusta o título da aba quando abrir essa tela
     this.title.setTitle('Login');
   }
 
@@ -42,30 +44,29 @@ export class LoginComponent {
   }
 
   entrar() {
-    this.erro = null;
     this.loading = true;
+    const request: LoginRequest = { email: this.email, senha: this.senha };
 
-    const request: LoginRequest = {
-      email: this.email,
-      senha: this.senha,
-    };
+    this.loginService
+      .login(request)
+      .pipe(
+        catchError((err) => {
+          this.loading = false;
+          // Mostra alerta mesmo que venha 401 do servidor
+          this.alertService.show(err.error?.message || 'Usuário ou senha incorretos!', 'error');
+          return throwError(() => err);
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.storageService.setItem(STORAGE_TOKEN, res.token);
+          this.storageService.setItem(STORAGE_REFRESH_TOKEN, res.refreshToken);
+          this.storageService.setItem(STORAGE_USER, res.usuario);
 
-    this.loginService.login(request).subscribe({
-      next: (res) => {
-        this.storageService.setItem(STORAGE_TOKEN, res.token);
-        this.storageService.setItem(STORAGE_REFRESH_TOKEN, res.refreshToken);
-        this.storageService.setItem(STORAGE_USER, res.usuario);
-
-        this.loading = false;
-
-        // Redireciona após login
-        window.location.href = '/dashboard';
-      },
-
-      error: (err) => {
-        this.loading = false;
-        this.erro = err.error?.message || 'Falha ao realizar login';
-      },
-    });
+          this.loading = false;
+          this.alertService.show('Login realizado com sucesso!', 'success');
+          window.location.href = '/dashboard';
+        },
+      });
   }
 }

@@ -68,10 +68,8 @@
           </div>
         </form>
 
-        <!-- ERRO -->
-        <p *ngIf="erro" class="mt-4 text-center text-red-400 text-sm">
-          {{ erro }}
-        </p>
+        <!-- NÃO PRECISA MAIS DO ERRO INLINE -->
+        <!-- ALERTAS SERÃO MOSTRADOS PELO ALERT COMPONENT -->
 
         <p class="mt-10 text-center text-sm/6 text-gray-400">
           Ainda não tem uma conta?
@@ -98,4 +96,7 @@
       </div>
     </div>
   </div>
+
+  <!-- ALERT COMPONENT GLOBAL -->
+  <app-alert></app-alert>
 </div>

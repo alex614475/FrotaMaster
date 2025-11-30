@@ -1,0 +1,11 @@
+<div *ngIf="alertService.visible" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+  <div
+    class="px-6 py-4 rounded-md text-lg flex items-center max-w-lg mx-auto"
+    [ngClass]="alertService.bgClass"
+  >
+    <svg viewBox="0 0 24 24" class="w-5 h-5 mr-3 text-current" [ngClass]="alertService.textClass">
+      <path [attr.d]="alertService.iconPath" fill="currentColor"></path>
+    </svg>
+    <span [ngClass]="alertService.textClass">{{ alertService.message }}</span>
+  </div>
+</div>
