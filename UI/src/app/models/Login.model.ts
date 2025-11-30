@@ -14,3 +14,7 @@ export interface LoginResponse {
     ativo: boolean;
   };
 }
+
+export interface LoginRefreshTokenRequest {
+  refreshToken: string;
+}

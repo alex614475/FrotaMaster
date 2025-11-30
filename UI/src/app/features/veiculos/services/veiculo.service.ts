@@ -1,8 +1,8 @@
 // src/app/modules/gestao-frota/services/veiculo.service.ts
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from '../../../core/services/api.service';
 import { Veiculo } from '../../../models/veiculo.model';
+import { ApiService } from '../../../core/services/api.service';
 
 @Injectable({
   providedIn: 'root',
