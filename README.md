@@ -107,7 +107,7 @@ Essa estrutura permite escalabilidade, testabilidade e organização clara por d
 - **Descrição:** TTela de acesso do usuário, onde é possível informar e-mail e senha para entrar na aplicação.
 
 <img width="1918" height="873" alt="image" src="https://github.com/user-attachments/assets/603e9c60-a48a-4ac4-9bcf-55146a7a7dbe" />
-- **Autenticação:** Utiliza JWT (JSON Web Token). Ao efetuar login com sucesso:
+-Autenticação: Utiliza JWT (JSON Web Token). Ao efetuar login com sucesso:
 -É retornado um token de acesso (token) para autenticação nas requisições protegidas da API.
 -É retornado um refresh token (refreshToken) para renovar o token de acesso sem precisar fazer login novamente.
 
