@@ -1,13 +1,9 @@
-<nav class="bg-[#181818] text-white shadow-lg sticky top-0 z-50 relative overflow-hidden">
-  <!-- Caminhão animado no fundo da navbar -->
-
+<nav *ngIf="!isLoginPage" class="bg-[#181818] text-white shadow-lg sticky top-0 z-50 relative">
   <div class="container mx-auto flex justify-between items-center p-4 relative z-20">
-    <!-- Logo Fixa -->
     <div class="flex items-center">
       <img src="assets/imagens/Logo_branca.png" class="h-10 w-auto object-contain" />
     </div>
 
-    <!-- Menu Desktop -->
     <div class="hidden md:flex ml-10 flex items-baseline space-x-4">
       <a
         routerLink="/dashboard"
@@ -38,38 +34,56 @@
         routerLinkActive="bg-blue-800 text-white"
         class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-800 hover:text-white transition"
       >
-        Manutencão
+        Manutenção
       </a>
     </div>
 
-    <!-- Perfil -->
-    <div class="hidden md:flex items-center space-x-2 relative">
-      <span routerLink="/login" routerLinkActive="bg-blue-800 text-white">Login</span>
-
-      <div
-        *ngIf="openProfile"
-        class="absolute right-0 mt-10 w-48 rounded-md bg-blue-800 py-2 shadow-lg ring-1 ring-black/5"
+    <div class="hidden md:flex items-center space-x-4 relative">
+      <a
+        *ngIf="!isLogged"
+        routerLink="/login"
+        routerLinkActive="bg-blue-800 text-white"
+        class="rounded-md px-3 py-2 text-sm font-medium cursor-pointer hover:bg-blue-700 transition"
       >
-        <a class="block px-4 py-2 text-sm text-white hover:bg-blue-700">Perfil</a>
-        <a class="block px-4 py-2 text-sm text-white hover:bg-blue-700">Configurações</a>
-        <a class="block px-4 py-2 text-sm text-white hover:bg-blue-700">Sair</a>
+        Login
+      </a>
+
+      <div *ngIf="isLogged" class="relative">
+        <button
+          (click)="toggleProfile()"
+          class="px-3 py-2 rounded-md bg-blue-800 text-white text-sm hover:bg-blue-700 transition"
+        >
+          {{ userEmail }}
+        </button>
+
+        <div
+          *ngIf="openProfile"
+          class="absolute right-0 mt-2 w-48 rounded-md bg-blue-800 py-2 shadow-lg ring-1 ring-black/5 z-50"
+        >
+          <a class="block px-4 py-2 text-sm text-white hover:bg-blue-700">Perfil</a>
+          <a class="block px-4 py-2 text-sm text-white hover:bg-blue-700">Configurações</a>
+          <a
+            (click)="logout()"
+            class="block px-4 py-2 text-sm text-white hover:bg-blue-700 cursor-pointer"
+          >
+            Sair
+          </a>
+        </div>
       </div>
     </div>
 
-    <!-- Botão mobile -->
     <div class="md:hidden">
       <button (click)="toggleMobile()" class="text-white text-2xl">☰</button>
     </div>
   </div>
 
-  <!-- Menu Mobile -->
   <div
     *ngIf="openMobile"
-    class="md:hidden px-2 pt-2 pb-3 space-y-1 bg-gray-700 text-white0 shadow-lg z-50 relative"
+    class="md:hidden px-2 pt-2 pb-3 space-y-1 bg-gray-700 text-white shadow-lg z-50 relative"
   >
     <a
       routerLink="/dashboard"
-      routerLinkActive="bg-blue-700 text-white"
+      routerLinkActive="bg-blue-700"
       class="block rounded-md px-3 py-2 text-white hover:bg-blue-700 transition"
     >
       Dashboard
@@ -77,7 +91,7 @@
 
     <a
       routerLink="/veiculos"
-      routerLinkActive="bg-blue-700 text-white"
+      routerLinkActive="bg-blue-700"
       class="block rounded-md px-3 py-2 text-white hover:bg-blue-700 transition"
     >
       Veículos
@@ -85,10 +99,30 @@
 
     <a
       routerLink="/motoristas"
-      routerLinkActive="bg-blue-700 text-white"
+      routerLinkActive="bg-blue-700"
       class="block rounded-md px-3 py-2 text-white hover:bg-blue-700 transition"
     >
       Motorista
     </a>
+
+    <a
+      *ngIf="!isLogged"
+      routerLink="/login"
+      routerLinkActive="bg-blue-700"
+      class="block rounded-md px-3 py-2 text-white hover:bg-blue-700 transition"
+    >
+      Login
+    </a>
+
+    <!-- Mobile  -->
+    <div *ngIf="isLogged" class="px-3 py-2 border-t border-gray-600">
+      <p class="font-semibold">{{ userEmail }}</p>
+      <button
+        (click)="logout()"
+        class="mt-2 w-full text-left px-3 py-2 rounded-md bg-blue-800 hover:bg-blue-700"
+      >
+        Sair
+      </button>
+    </div>
   </div>
 </nav>
