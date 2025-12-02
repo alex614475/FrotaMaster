@@ -5,18 +5,17 @@ import { Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-import { StorageService } from '../../../core/services/storage.service';
-import {
-  STORAGE_REFRESH_TOKEN,
-  STORAGE_TOKEN,
-  STORAGE_USER,
-} from '../../../core/services/storage.service.constants';
-
-import { LoginRequest } from '../../../models/Login.model';
-import { LoginService } from '../service/login.service';
-import { Alert } from '../../../shared/components/generic-alert/alert';
-import { AlertService } from '../../../shared/components/generic-alert/Alert.service';
 import { catchError, throwError } from 'rxjs';
+import { Alert } from '../../../../shared/components/generic-alert/alert';
+import { StorageService } from '../../../../core/services/storage.service';
+import {
+  STORAGE_TOKEN,
+  STORAGE_REFRESH_TOKEN,
+  STORAGE_USER,
+} from '../../../../core/services/storage.service.constants';
+import { LoginRequest } from '../../../../models/Login.model';
+import { AlertService } from '../../../../shared/components/generic-alert/Alert.service';
+import { LoginService } from '../../service/login.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +23,7 @@ import { catchError, throwError } from 'rxjs';
   imports: [CommonModule, FormsModule, RouterModule, Alert], // adicionado NgIf
   templateUrl: './login.html',
 })
-export class LoginComponent {
+export class Login {
   email = '';
   senha = '';
   loading = false;

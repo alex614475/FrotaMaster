@@ -11,7 +11,7 @@ import { Veiculo } from '../../../../models/veiculo.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './veiculo-form.html',
 })
-export class VeiculoFormComponent implements OnInit {
+export class VeiculoForm implements OnInit {
   veiculoForm: FormGroup;
   submitted = false;
   loading = false;

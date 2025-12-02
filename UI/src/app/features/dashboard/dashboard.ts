@@ -5,7 +5,7 @@ import * as L from 'leaflet';
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
 })
-export class DashboardComponent implements AfterViewInit {
+export class Dashboard implements AfterViewInit {
   veiculosRota = 5;
   veiculosManutencao = 2;
   motoristasAtivos = 3;

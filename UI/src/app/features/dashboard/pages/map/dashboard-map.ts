@@ -6,7 +6,7 @@ import * as L from 'leaflet';
   templateUrl: './dashboard-map.html',
   styleUrls: [],
 })
-export class DashboardMapComponent implements OnInit {
+export class DashboardMap implements OnInit {
   private map!: L.Map;
 
   // Valores fixos para teste

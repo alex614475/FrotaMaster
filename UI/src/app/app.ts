@@ -1,6 +1,6 @@
 // certifique-se do caminho e nome
-import { NavbarComponent } from './layout/navbar/navbar';
-import { FooterComponent } from './layout/footer/navbar';
+import { Navbar } from './layout/navbar/navbar';
+import { Footer } from './layout/footer/navbar';
 import { NgIf } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { Component } from '@angular/core';
 
     <app-footer *ngIf="showLayout"></app-footer>
   `,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, NgIf],
+  imports: [RouterOutlet, Navbar, Footer, NgIf],
 })
 export class App {
   showLayout = true;

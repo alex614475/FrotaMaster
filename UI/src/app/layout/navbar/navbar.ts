@@ -10,7 +10,7 @@ import { STORAGE_TOKEN, STORAGE_USER } from '../../core/services/storage.service
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.html',
 })
-export class NavbarComponent {
+export class Navbar {
   openProfile = false;
   openMobile = false;
 

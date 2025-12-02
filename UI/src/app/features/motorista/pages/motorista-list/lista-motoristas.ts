@@ -8,7 +8,7 @@ import { Motorista } from '../../../../models/motorista.model';
 import { MotoristaService } from '../../services/motorista.service';
 
 import {
-  GenericTableComponent,
+  GenericTable,
   TableColumn,
   TableAction,
   TableConfig,
@@ -19,10 +19,10 @@ import {
 @Component({
   selector: 'app-lista-motoristas',
   standalone: true,
-  imports: [AsyncPipe, GenericTableComponent],
+  imports: [AsyncPipe, GenericTable],
   templateUrl: './lista-motoristas.html',
 })
-export class ListaMotoristasComponent implements OnInit {
+export class ListaMotoristas implements OnInit {
   motoristas$!: Observable<Motorista[]>;
 
   paginationConfig: PaginationConfig = {

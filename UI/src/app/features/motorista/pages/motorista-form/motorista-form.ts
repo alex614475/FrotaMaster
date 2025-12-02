@@ -11,7 +11,7 @@ import { Motorista } from '../../../../models/motorista.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './motorista-form.html',
 })
-export class CadastroMotoristaComponent implements OnInit {
+export class CadastroMotorista implements OnInit {
   motoristaForm: FormGroup;
   submitted = false;
   loading = false;

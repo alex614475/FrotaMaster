@@ -56,7 +56,7 @@ export interface PaginationEvent {
   templateUrl: './generic-table.html',
   styleUrls: ['./generc.css'],
 })
-export class GenericTableComponent implements OnInit {
+export class GenericTable implements OnInit {
   @Input() config: TableConfig = {
     title: 'Lista',
     showFilters: true,

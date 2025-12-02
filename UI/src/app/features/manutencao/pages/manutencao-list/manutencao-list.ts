@@ -8,7 +8,7 @@ import { Manutencao } from '../../../../models/manutencao.model';
 import { ManutencaoService } from '../../services/manutencao.service';
 
 import {
-  GenericTableComponent,
+  GenericTable,
   TableColumn,
   TableAction,
   TableConfig,
@@ -19,10 +19,10 @@ import {
 @Component({
   selector: 'app-manutencao-list',
   standalone: true,
-  imports: [AsyncPipe, GenericTableComponent],
+  imports: [AsyncPipe, GenericTable],
   templateUrl: './manutencao-list.html',
 })
-export class ManutencaoListComponent implements OnInit {
+export class ManutencaoList implements OnInit {
   manutencoes$!: Observable<Manutencao[]>;
 
   // Paginação

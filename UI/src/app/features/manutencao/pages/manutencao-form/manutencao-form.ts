@@ -13,7 +13,7 @@ import { Veiculo } from '../../../../models/veiculo.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './manutencao-form.html',
 })
-export class ManutencaoFormComponent implements OnInit {
+export class ManutencaoForm implements OnInit {
   manutencaoForm!: FormGroup;
   loading = false;
   manutencaoId: number | null = null;

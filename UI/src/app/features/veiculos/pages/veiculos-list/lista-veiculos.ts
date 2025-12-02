@@ -1,27 +1,25 @@
-// lista-veiculos.component.ts
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { Observable, tap, map, catchError, of } from 'rxjs';
 import { Veiculo } from '../../../../models/veiculo.model';
-import { VeiculoService } from '../../services/veiculo.service';
 import {
-  GenericTableComponent,
+  PaginationConfig,
+  TableConfig,
   TableColumn,
   TableAction,
-  TableConfig,
-  PaginationConfig,
   PaginationEvent,
+  GenericTable,
 } from '../../../../shared/components/generic-table/generic-table';
+import { VeiculoService } from '../../services/veiculo.service';
 
 @Component({
   selector: 'app-lista-veiculos',
   standalone: true,
-  imports: [GenericTableComponent, AsyncPipe],
+  imports: [GenericTable, AsyncPipe],
   templateUrl: './lista-veiculos.html',
 })
-export class ListaVeiculosComponent implements OnInit {
+export class ListaVeiculos implements OnInit {
   veiculos$!: Observable<Veiculo[]>;
 
   // Configuração de paginação
